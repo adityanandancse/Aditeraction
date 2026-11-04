@@ -4,6 +4,7 @@ import { site } from "~/lib/site";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { BracketLink } from "~/components/ui/BracketLink";
+import { Reveal } from "~/components/motion/Reveal";
 
 export const Route = createFileRoute("/contact")({
   head: () =>
@@ -36,14 +37,14 @@ function Contact() {
         </a>
       </div>
 
-      <div className="mt-14 border-t border-line pt-8">
+      <Reveal as="div" className="mt-14 border-t border-line pt-8">
         <Eyebrow>Explore</Eyebrow>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
           <BracketLink to="/services">Services</BracketLink>
           <BracketLink to="/work">Work</BracketLink>
           <BracketLink to="/about">About</BracketLink>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

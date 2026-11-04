@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { site } from "~/lib/site";
 import { LogoHorizontal } from "./Logo";
+import { Reveal } from "~/components/motion/Reveal";
 
 const colTitle = "font-mono text-[11px] uppercase tracking-[0.14em] text-graphite";
 const colLink = "text-sm text-paper/80 transition-colors hover:text-vermilion";
@@ -13,7 +14,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           {/* Brand block */}
-          <div className="col-span-2 md:col-span-1">
+          <Reveal className="col-span-2 md:col-span-1">
             <Link to="/" aria-label="Aditeraction, home" className="inline-flex h-5">
               <LogoHorizontal className="h-5" />
             </Link>
@@ -22,10 +23,10 @@ export function Footer() {
               Idea to launched<span className="text-vermilion">.</span>
             </p>
             <p className="mt-1 text-sm text-graphite">{site.descriptor}</p>
-          </div>
+          </Reveal>
 
           {/* Services column */}
-          <div>
+          <Reveal>
             <p className={colTitle}>Services</p>
             <ul className="mt-4 flex flex-col gap-2.5">
               {site.services.map((s) => (
@@ -36,10 +37,10 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
 
           {/* Studio column */}
-          <div>
+          <Reveal>
             <p className={colTitle}>Studio</p>
             <ul className="mt-4 flex flex-col gap-2.5">
               {site.footer.studio.map((n) => (
@@ -50,10 +51,10 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
 
           {/* Connect column — email is real; social renders nothing until site.social has entries */}
-          <div>
+          <Reveal>
             <p className={colTitle}>Connect</p>
             <ul className="mt-4 flex flex-col gap-2.5">
               <li>
@@ -69,10 +70,10 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
 
           {/* Legal column — placeholders (pages not in Phase 1 scope; no broken links) */}
-          <div>
+          <Reveal>
             <p className={colTitle}>Legal</p>
             <ul className="mt-4 flex flex-col gap-2.5">
               {site.footer.legal.map((label) => (
@@ -81,7 +82,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] uppercase tracking-[0.1em] text-graphite sm:flex-row sm:items-center sm:justify-between">

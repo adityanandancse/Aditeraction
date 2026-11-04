@@ -6,7 +6,10 @@ import { NotFound } from "./components/layout/NotFound";
 export function getRouter() {
   const router = createTanStackRouter({
     routeTree,
-    scrollRestoration: true,
+    // Scroll is owned by SmoothScroll (Lenis-aware top/restore/hash). Opacity
+    // crossfade on <main> via the browser View Transitions API.
+    scrollRestoration: false,
+    defaultViewTransition: true,
     defaultPreload: "intent",
     defaultNotFoundComponent: () => <NotFound />,
   });

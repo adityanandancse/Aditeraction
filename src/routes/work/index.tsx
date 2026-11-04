@@ -3,6 +3,7 @@ import { seo } from "~/lib/seo";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { ButtonLink } from "~/components/ui/Button";
+import { Reveal } from "~/components/motion/Reveal";
 import { site } from "~/lib/site";
 
 // No case-study data yet — none is invented (hard rule). The hub ships with an
@@ -32,7 +33,7 @@ function WorkHub() {
       </p>
 
       {caseStudies.length === 0 ? (
-        <div className="mt-12 border border-line bg-fog p-8">
+        <Reveal as="div" className="mt-12 border border-line bg-fog p-8">
           <p className="font-mono text-xs uppercase tracking-[0.12em] text-graphite">
             Case studies in preparation
           </p>
@@ -44,7 +45,7 @@ function WorkHub() {
               {site.cta.label}
             </ButtonLink>
           </div>
-        </div>
+        </Reveal>
       ) : null}
     </section>
   );

@@ -10,6 +10,11 @@ import { site } from "~/lib/site";
 import { Header } from "~/components/layout/Header";
 import { Footer } from "~/components/layout/Footer";
 import { NotFound } from "~/components/layout/NotFound";
+import { SmoothScroll } from "~/components/motion/SmoothScroll";
+
+// Runs before paint: marks the document as JS-capable so the reveal hidden
+// state can apply. Without JS this never runs and all content stays visible.
+const JS_CLASS = "document.documentElement.classList.add('js')";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -42,12 +47,15 @@ function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_CLASS }} />
         <HeadContent />
       </head>
       <body>
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
+        <SmoothScroll>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+        </SmoothScroll>
         <Scripts />
       </body>
     </html>

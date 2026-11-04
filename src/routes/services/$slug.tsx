@@ -5,6 +5,7 @@ import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { BracketLink } from "~/components/ui/BracketLink";
 import { ButtonLink } from "~/components/ui/Button";
+import { Reveal } from "~/components/motion/Reveal";
 
 export const Route = createFileRoute("/services/$slug")({
   loader: ({ params }) => {
@@ -41,7 +42,7 @@ function ServicePage() {
       </div>
 
       {/* Spoke ↔ spoke links (01 §7.3) + back to hub */}
-      <div className="mt-16 border-t border-line pt-8">
+      <Reveal as="div" className="mt-16 border-t border-line pt-8">
         <Eyebrow>Related services</Eyebrow>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
           {related.map((s) => (
@@ -55,7 +56,7 @@ function ServicePage() {
             ← All services
           </Link>
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

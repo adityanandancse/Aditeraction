@@ -4,6 +4,7 @@ import { site } from "~/lib/site";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { Panel } from "~/components/ui/Panel";
 import { ButtonLink } from "~/components/ui/Button";
+import { Reveal } from "~/components/motion/Reveal";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -44,12 +45,14 @@ function Home() {
         <Eyebrow>What we do</Eyebrow>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {site.services.map((s) => (
-            <Link key={s.slug} to="/services/$slug" params={{ slug: s.slug }} className="block">
-              <Panel className="h-full">
-                <h2 className="font-display text-lg text-paper">{s.name}</h2>
-                <p className="mt-2 text-sm text-graphite">{s.short}</p>
-              </Panel>
-            </Link>
+            <Reveal key={s.slug} className="h-full">
+              <Link to="/services/$slug" params={{ slug: s.slug }} className="block h-full">
+                <Panel className="h-full">
+                  <h2 className="font-display text-lg text-paper">{s.name}</h2>
+                  <p className="mt-2 text-sm text-graphite">{s.short}</p>
+                </Panel>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </section>

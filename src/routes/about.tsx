@@ -3,6 +3,7 @@ import { seo } from "~/lib/seo";
 import { site } from "~/lib/site";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
+import { Reveal } from "~/components/motion/Reveal";
 
 // Values from brand context. No reference to any previous company of the founder.
 const values = [
@@ -40,10 +41,10 @@ function About() {
 
       <div className="mt-14 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
         {values.map(([title, body]) => (
-          <div key={title} className="bg-fog p-6">
+          <Reveal key={title} className="bg-fog p-6">
             <h2 className="font-display text-lg text-paper">{title}</h2>
             <p className="mt-2 text-sm text-graphite">{body}</p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
