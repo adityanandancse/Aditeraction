@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+
+# build output
+dist
+.output
+.vite
+.nitro
+
+# cloudflare / wrangler runtime state
+.wrangler
+worker-configuration.d.ts
+
+# tanstack generated route tree (regenerated on dev/build)
+src/routeTree.gen.ts
+
+# env & local
+.env
+.env.*
+!.env.example
+*.local

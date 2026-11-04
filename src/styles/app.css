@@ -1,0 +1,60 @@
+/* Aditeraction — base styles & brand tokens.
+   Brand rules (do not break):
+   - No gradients. No glows. No second hue. Vermilion (#FF4D2E) is the ONLY accent.
+   - Primary buttons = Vermilion background + INK text (white-on-vermilion fails contrast).
+   - Default surface is Ink; text is Paper. One accent moment per view. */
+
+@import "tailwindcss";
+
+/* Self-hosted variable fonts (font-display: swap via @fontsource-variable). */
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme {
+  --color-ink: #0B0B0D;
+  --color-paper: #F4F1EC;
+  --color-vermilion: #FF4D2E;
+  --color-graphite: #8A8A94;
+  --color-fog: #1C1C20;
+  --color-line: rgb(138 138 148 / 0.22);
+  --color-line-strong: rgb(138 138 148 / 0.45);
+  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --tracking-display: -0.035em;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-ink);
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-vermilion);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-vermilion);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-display);
+    font-weight: 600;
+  }
+}
