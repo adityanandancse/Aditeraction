@@ -23,10 +23,12 @@ function headerOffset(): number {
 
 /**
  * Smooth scroll + scroll management, mounted once in __root.
- * - Lenis/GSAP/ScrollTrigger are dynamically imported inside the effect, so
- *   they stay out of the SSR/critical bundle (client-only lazy chunks).
- * - Lenis is driven by the GSAP ticker (autoRaf: false) and kept in sync with
- *   ScrollTrigger.
+ * - Lenis is dynamically imported inside the effect (client-only lazy chunk) and
+ *   runs on its OWN rAF (autoRaf: true) — no GSAP, no GSAP ticker. GSAP and
+ *   ScrollTrigger are fully removed from the project.
+ * - The dynamic import is deferred to requestIdleCallback so Lenis module eval
+ *   never lands in the hydration long task. Anchor/popstate listeners attach
+ *   synchronously so navigation works immediately even before Lenis is ready.
  * - prefers-reduced-motion: reduce → Lenis is NOT initialised (native scroll);
  *   changes to the preference are listened for and re-applied live.
  * - Route changes jump to top; #hash targets scroll with a header offset;
@@ -39,8 +41,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     let disposed = false;
     let instance: LenisType | null = null;
-    let tickerFn: ((time: number) => void) | null = null;
-    let removeGsapTicker: (() => void) | null = null;
     const positions = new Map<string, number>();
     let navType: "push" | "pop" = "push";
     let currentKey =
@@ -124,28 +124,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         instance = null;
         window.addEventListener("scroll", onScroll, { passive: true });
       } else {
-        const [{ default: Lenis }, gsapMod, stMod] = await Promise.all([
-          import("lenis"),
-          import("gsap"),
-          import("gsap/ScrollTrigger"),
-        ]);
+        const { default: Lenis } = await import("lenis");
         if (disposed) return;
-        const gsap = gsapMod.gsap ?? gsapMod.default;
-        const ScrollTrigger = stMod.ScrollTrigger;
-        gsap.registerPlugin(ScrollTrigger);
-
-        instance = new Lenis({ autoRaf: false });
-
-        tickerFn = (time: number) => {
-          instance?.raf(time * 1000);
-        };
-        gsap.ticker.add(tickerFn);
-        gsap.ticker.lagSmoothing(0);
-        removeGsapTicker = () => {
-          if (tickerFn) gsap.ticker.remove(tickerFn);
-        };
-
-        instance.on("scroll", ScrollTrigger.update);
+        // autoRaf: Lenis drives its own requestAnimationFrame loop — no ticker.
+        instance = new Lenis({ autoRaf: true });
         instance.on("scroll", onScroll);
       }
       if (disposed) {
@@ -156,9 +138,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     function teardown() {
-      removeGsapTicker?.();
-      removeGsapTicker = null;
-      tickerFn = null;
       window.removeEventListener("scroll", onScroll);
       instance?.destroy();
       instance = null;
@@ -172,7 +151,19 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     mq.addEventListener("change", onPreferenceChange);
 
     attachShared();
-    void setup();
+
+    // Defer Lenis init off the hydration critical path — its module eval then
+    // runs during an idle slice instead of the first post-hydration frame.
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, o?: { timeout?: number }) => number;
+      cancelIdleCallback?: (h: number) => void;
+    };
+    let idleHandle: number | undefined;
+    if (w.requestIdleCallback) {
+      idleHandle = w.requestIdleCallback(() => void setup(), { timeout: 1500 });
+    } else {
+      idleHandle = window.setTimeout(() => void setup(), 1);
+    }
 
     const unsubscribe = router.subscribe("onResolved", ({ toLocation }) => {
       handleNav(toLocation as { hash?: string; href: string; state?: unknown });
@@ -183,13 +174,12 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       unsubscribe();
       mq.removeEventListener("change", onPreferenceChange);
       detachShared();
-      removeGsapTicker?.();
+      if (idleHandle !== undefined) {
+        if (w.requestIdleCallback && w.cancelIdleCallback) w.cancelIdleCallback(idleHandle);
+        else clearTimeout(idleHandle);
+      }
       window.removeEventListener("scroll", onScroll);
       instance?.destroy();
-      // kill any ScrollTriggers created this session (no HMR leaks)
-      import("gsap/ScrollTrigger")
-        .then(({ ScrollTrigger }) => ScrollTrigger.getAll().forEach((t) => t.kill()))
-        .catch(() => {});
       try {
         window.history.scrollRestoration = prevHistoryRestoration;
       } catch {

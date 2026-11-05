@@ -34,8 +34,14 @@ export function Header() {
     };
   }, []);
 
+  // Solid near-opaque Ink instead of bg + backdrop-blur: a blurred backdrop
+  // re-samples and repaints the WebGL hero on every scroll frame. Brand-safe
+  // (Ink at 92%).
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ink/82 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-50 border-b border-line"
+      style={{ backgroundColor: "rgb(11 11 13 / 0.92)" }}
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" aria-label="Aditeraction, home" className="h-5">
           <LogoHorizontal className="h-5" />

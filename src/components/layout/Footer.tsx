@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { site } from "~/lib/site";
-import { LogoHorizontal } from "./Logo";
 import { Reveal } from "~/components/motion/Reveal";
+import logoHorizontalUrl from "~/assets/brand/aditeraction-logo-horizontal-on-dark.svg?url";
 
 const colTitle = "font-mono text-[11px] uppercase tracking-[0.14em] text-graphite";
 const colLink = "text-sm text-paper/80 transition-colors hover:text-vermilion";
@@ -10,13 +10,21 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-line bg-ink">
+    <footer className="adx-cv-footer border-t border-line bg-ink">
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           {/* Brand block */}
           <Reveal className="col-span-2 md:col-span-1">
             <Link to="/" aria-label="Aditeraction, home" className="inline-flex h-5">
-              <LogoHorizontal className="h-5" />
+              <img
+                src={logoHorizontalUrl}
+                alt="Aditeraction"
+                width={340}
+                height={52}
+                decoding="async"
+                loading="lazy"
+                className="h-5 w-auto"
+              />
             </Link>
             {/* Tagline and descriptor NEVER on the same visual line. */}
             <p className="mt-5 font-display text-lg tracking-[-0.03em] text-paper">

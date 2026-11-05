@@ -50,10 +50,15 @@ function ensureObserver(): IntersectionObserver | null {
   return io;
 }
 
-export function observeReveal(el: HTMLElement) {
-  if (typeof window === "undefined") return;
-  armSafetyNet();
+// Observing happens off the hydration critical path: elements queue here and are
+// attached during an idle slice. Below-the-fold reveals aren't visible yet, so a
+// small delay is invisible; the 2s safety net still guarantees they appear.
+const pending: HTMLElement[] = [];
+let flushScheduled = false;
+
+function attach(el: HTMLElement) {
   // Reduced motion (or no observer support): reveal immediately, no transform.
+  // (Under reduced motion the hidden CSS never applies, so this is a no-op paint.)
   if (reduceMotion()) {
     el.dataset.revealed = "true";
     return;
@@ -64,4 +69,23 @@ export function observeReveal(el: HTMLElement) {
     return;
   }
   observer.observe(el);
+}
+
+function flush() {
+  flushScheduled = false;
+  const batch = pending.splice(0, pending.length);
+  for (const el of batch) attach(el);
+}
+
+export function observeReveal(el: HTMLElement) {
+  if (typeof window === "undefined") return;
+  armSafetyNet();
+  pending.push(el);
+  if (flushScheduled) return;
+  flushScheduled = true;
+  const w = window as unknown as {
+    requestIdleCallback?: (cb: () => void, o?: { timeout?: number }) => number;
+  };
+  if (w.requestIdleCallback) w.requestIdleCallback(flush, { timeout: 500 });
+  else window.setTimeout(flush, 1);
 }
