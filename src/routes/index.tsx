@@ -1,11 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
-import { site } from "~/lib/site";
-import { Eyebrow } from "~/components/ui/Eyebrow";
-import { Panel } from "~/components/ui/Panel";
-import { Reveal } from "~/components/motion/Reveal";
 import { Landing } from "~/components/landing/Landing";
 import { IntroLoader } from "~/components/landing/IntroLoader";
+import { HomePillars } from "~/components/home/HomePillars";
+import { HomeProcess } from "~/components/home/HomeProcess";
+import { HomeStats } from "~/components/home/HomeStats";
+import { HomeServices } from "~/components/home/HomeServices";
+import { HomeStack } from "~/components/home/HomeStack";
+import { HomeWork } from "~/components/home/HomeWork";
+import { HomeContact } from "~/components/home/HomeContact";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -28,23 +31,19 @@ function Home() {
           The H1 "Idea to launched." is the LCP — never the canvas. */}
       <Landing />
 
-      {/* Services overview — links to every spoke (hub-and-spoke, 01 §7).
-          Below the fold (starts ~2800px down) → skip rendering until near view. */}
-      <section className="adx-cv-section mx-auto max-w-6xl px-6 py-16">
-        <Eyebrow>What we do</Eyebrow>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {site.services.map((s) => (
-            <Reveal key={s.slug} className="h-full">
-              <Link to="/services/$slug" params={{ slug: s.slug }} className="block h-full">
-                <Panel className="h-full">
-                  <h2 className="font-display text-lg text-paper">{s.name}</h2>
-                  <p className="mt-2 text-sm text-graphite">{s.short}</p>
-                </Panel>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      {/* Phase 4a — home sections after the hero (copy lives in site.ts.home):
+          Brand/Site/App pillars → how it works → at a glance. */}
+      <HomePillars />
+      <HomeProcess />
+      <HomeStats />
+
+      {/* Phase 4b — services → stack → selected work → contact CTA. These
+          replace the earlier simple "What we do" grid; the footer (section 8)
+          lives in the root layout. */}
+      <HomeServices />
+      <HomeStack />
+      <HomeWork />
+      <HomeContact />
     </>
   );
 }

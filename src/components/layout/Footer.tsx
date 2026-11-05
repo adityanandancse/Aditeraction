@@ -33,64 +33,69 @@ export function Footer() {
             <p className="mt-1 text-sm text-graphite">{site.descriptor}</p>
           </Reveal>
 
-          {/* Services column */}
-          <Reveal>
-            <p className={colTitle}>Services</p>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              {site.services.map((s) => (
-                <li key={s.slug}>
-                  <Link to="/services/$slug" params={{ slug: s.slug }} className={colLink}>
-                    {s.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          {/* All footer navigation lives in one semantic nav (links to the
+              locked URLs); the columns are headed groups within it. */}
+          <nav aria-label="Footer" className="contents">
+            {/* Services column */}
+            <Reveal>
+              <p className={colTitle}>Services</p>
+              <ul className="mt-4 flex flex-col gap-2.5">
+                {site.services.map((s) => (
+                  <li key={s.slug}>
+                    <Link to="/services/$slug" params={{ slug: s.slug }} className={colLink}>
+                      {s.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
 
-          {/* Studio column */}
-          <Reveal>
-            <p className={colTitle}>Studio</p>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              {site.footer.studio.map((n) => (
-                <li key={n.to}>
-                  <Link to={n.to} className={colLink}>
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+            {/* Studio column */}
+            <Reveal>
+              <p className={colTitle}>Studio</p>
+              <ul className="mt-4 flex flex-col gap-2.5">
+                {site.footer.studio.map((n) => (
+                  <li key={n.to}>
+                    <Link to={n.to} className={colLink}>
+                      {n.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
 
-          {/* Connect column — email is real; social renders nothing until site.social has entries */}
-          <Reveal>
-            <p className={colTitle}>Connect</p>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              <li>
-                <a href={`mailto:${site.email}`} className={colLink}>
-                  {site.email}
-                </a>
-              </li>
-              {site.social.map((s) => (
-                <li key={s.href}>
-                  <a href={s.href} className={colLink} rel="me noopener" target="_blank">
-                    {s.label}
+            {/* Connect column — email is real; socials render nothing until
+                site.socials has entries (TODO(AB)). */}
+            <Reveal>
+              <p className={colTitle}>Connect</p>
+              <ul className="mt-4 flex flex-col gap-2.5">
+                <li>
+                  <a href={`mailto:${site.email}`} className={colLink}>
+                    {site.email}
                   </a>
                 </li>
-              ))}
-            </ul>
-          </Reveal>
+                {site.socials.map((s) => (
+                  <li key={s.href}>
+                    <a href={s.href} className={colLink} rel="me noopener" target="_blank">
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
 
-          {/* Legal column — placeholders (pages not in Phase 1 scope; no broken links) */}
-          <Reveal>
-            <p className={colTitle}>Legal</p>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              {site.footer.legal.map((label) => (
-                <li key={label} className="text-sm text-graphite/60">
-                  {label}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+            {/* Legal column — placeholders (pages not in Phase 1 scope; no broken links) */}
+            <Reveal>
+              <p className={colTitle}>Legal</p>
+              <ul className="mt-4 flex flex-col gap-2.5">
+                {site.footer.legal.map((label) => (
+                  <li key={label} className="text-sm text-graphite/60">
+                    {label}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </nav>
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] uppercase tracking-[0.1em] text-graphite sm:flex-row sm:items-center sm:justify-between">

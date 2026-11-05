@@ -5,7 +5,12 @@ import {
   createRootRoute,
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import appCss from "~/styles/app.css?url";
+// Dev: load the stylesheet as a file so Vite HMR applies CSS edits live.
+// Prod: inline the compiled sheet (below) so first paint needs no extra CSS
+// request — the whole file is small (~7.7KB brotli) and was flagged as the only
+// render-blocking resource on the home page.
+import appCssUrl from "~/styles/app.css?url";
+import appCssInline from "~/styles/app.css?inline";
 // Preload the latin variable woff2 that the H1 (Space Grotesk) and body (Inter)
 // need first paint. JetBrains Mono is NOT preloaded (below the fold, mono UI).
 import spaceGroteskLatin from "@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url";
@@ -21,6 +26,10 @@ import { SmoothScroll } from "~/components/motion/SmoothScroll";
 // session. Without JS this never runs and all content stays visible.
 const JS_CLASS =
   "document.documentElement.classList.add('js');try{if(sessionStorage.getItem('adx-intro'))document.documentElement.classList.add('intro-seen')}catch(e){}";
+
+// In production the built CSS is inlined into <head>; in dev it stays a linked
+// file so CSS hot-module-reload keeps working.
+const PROD = import.meta.env.PROD;
 
 export const Route = createRootRoute({
   head: () => ({
@@ -45,11 +54,20 @@ export const Route = createRootRoute({
         href: interLatin,
         crossOrigin: "anonymous",
       },
-      { rel: "stylesheet", href: appCss },
+      // Dev only: external stylesheet (keeps CSS HMR). In prod the sheet is
+      // inlined via `styles` below instead of a render-blocking <link>.
+      ...(PROD ? [] : [{ rel: "stylesheet", href: appCssUrl }]),
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", href: "/icons/icon-32.png", sizes: "32x32" },
       { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
     ],
+    // Prod only: inline the entire built stylesheet into a <head> <style>, so
+    // the first paint needs no extra CSS request (fixes the ~846ms render-block
+    // on /assets/app-*.css). TanStack renders this identically on the server and
+    // during hydration, so there is no FOUC and no CLS change — the same rules
+    // apply at first paint as before. Font preloads above are untouched, and the
+    // @font-face / font-display: swap rules now live inside this inlined CSS.
+    ...(PROD ? { styles: [{ children: appCssInline }] } : {}),
   }),
   notFoundComponent: () => <NotFound />,
   component: RootComponent,
