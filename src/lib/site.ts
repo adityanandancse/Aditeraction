@@ -79,8 +79,8 @@ export const site = {
     whatWeDo: {
       question: "What does Aditeraction do?",
       answer:
-        "Aditeraction is a founder-led design and engineering studio that takes founders from idea to launched brand, site and app. The same team designs the brand and writes the production code, so nothing is lost in handoff. We work with new businesses and established ones with no digital presence, worldwide.",
-      words: 49,
+        "Aditeraction is a founder-led design and engineering studio that takes founders from idea to launched brand, site and app. The same team designs the brand and writes the production code, so nothing is lost in handoff. We work with new businesses and established ones with no digital presence, worldwide, across fashion, textiles, D2C, restaurants and real estate.",
+      words: 57,
     },
     pricing: {
       question: "How much does a project with Aditeraction cost?",
@@ -105,7 +105,7 @@ export const site = {
     },
     {
       q: "Who is Aditeraction for?",
-      a: "We work with founders and businesses that are either brand new, or established but with no digital presence yet. Industry doesn't matter, and we work across all of them. Clients are based in India and worldwide, so wherever you're starting from, Aditeraction can take you from idea to launched.",
+      a: "We work with founders and businesses that are either brand new, or established but with no digital presence yet. Any industry — we've delivered for fashion, textiles, D2C, restaurants and real estate. Clients are based in India and worldwide, so wherever you're starting from, Aditeraction takes you from idea to launched.",
     },
     {
       q: "How much does a project cost?",
@@ -149,7 +149,7 @@ export const site = {
     },
     {
       q: "What is the Care plan?",
-      a: "The Care plan is an optional monthly add-on that keeps your site or app healthy after launch. It covers hosting, updates, small changes and regular performance checks, so things stay fast and current without you having to think about them. You can add it to any plan, or skip it.",
+      a: "The Care plan is an optional monthly add-on that keeps your site or app healthy after launch. It covers hosting, updates, regular performance checks and up to 2 hours of changes per month, so things stay fast and current without you thinking about them. You can add it to any plan, or skip it.",
     },
     {
       q: "How do I get started?",
@@ -418,6 +418,10 @@ export const site = {
     },
   ] satisfies ServiceDef[],
 
+  // Industries we've delivered for (Phase 5d). Openness stays "any industry";
+  // this is the delivered-for list only — no counts, no client names.
+  industries: ["Fashion", "Textiles", "D2C", "Restaurants", "Real estate"],
+
   // Home page sections after the hero (Phase 4a). Single source of truth: the
   // section components read every string from here — no hardcoded copy in JSX.
   // Founder-voice, plain. No invented numbers, clients or testimonials.
@@ -653,7 +657,7 @@ export const site = {
   // Optional add-on offered with any plan (shown below the plans grid).
   plansAddon: {
     name: "Care plan",
-    body: "Monthly hosting, updates, small changes and performance checks — available with any plan.",
+    body: "Monthly hosting, updates, performance checks and up to 2 hours of changes — available with any plan.",
   },
 
   // Pricing is always quoted to scope — never a fabricated number.
