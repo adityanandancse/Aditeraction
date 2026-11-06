@@ -10,6 +10,7 @@ import { HomePlans } from "~/components/home/HomePlans";
 import { HomeWhy } from "~/components/home/HomeWhy";
 import { HomeStack } from "~/components/home/HomeStack";
 import { HomeWork } from "~/components/home/HomeWork";
+import { HomeFaq } from "~/components/home/HomeFaq";
 import { HomeContact } from "~/components/home/HomeContact";
 
 export const Route = createFileRoute("/")({
@@ -49,6 +50,7 @@ function Home() {
       <HomeWhy />
       <HomeStack />
       <HomeWork />
+      <HomeFaq />
       <HomeContact />
     </>
   );

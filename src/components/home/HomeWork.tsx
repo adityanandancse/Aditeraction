@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { site } from "~/lib/site";
+import { site, getService } from "~/lib/site";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { Reveal } from "~/components/motion/Reveal";
 
@@ -45,6 +45,12 @@ export function HomeWork() {
         <ol className="mt-12 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {site.work.map((item) => {
             const isPlaceholder = item.title === PLACEHOLDER;
+            // Card chip = the service line(s) this project demonstrates, resolved
+            // from slugs so the label always matches the canonical service name.
+            const category = item.services
+              .map((slug) => getService(slug)?.name)
+              .filter(Boolean)
+              .join(", ");
             const cardClass = `group flex h-full flex-col border border-line ${
               isPlaceholder
                 ? ""
@@ -56,7 +62,7 @@ export function HomeWork() {
                 <span aria-hidden className="block aspect-[4/3] w-full bg-fog" />
                 <span className="flex flex-1 flex-col p-6">
                   <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-graphite">
-                    {item.category}
+                    {category}
                   </span>
                   <span className="mt-3 font-display text-lg text-paper">{item.title}</span>
                   <span className="mt-2 flex-1 text-sm leading-relaxed text-graphite">

@@ -41,6 +41,7 @@ export interface ServiceDef {
   timeline: string; // TODO(AB) — real timeline once confirmed
   pricing: string; // TODO(AB) — real pricing once confirmed
   faqs: readonly Faq[]; // TODO(AB) — empty until written
+  plans: readonly string[]; // plan ids (site.plans) whose scope includes this service
 }
 
 // Static routes used in nav/footer (keeps TanStack's typed `to` happy).
@@ -49,6 +50,39 @@ export type AppPath = "/" | "/services" | "/work" | "/about" | "/contact";
 export interface NavItem {
   label: string;
   to: AppPath;
+}
+
+// Case study (Phase 6b). Optional fields render ONLY when present — no invented
+// clients, numbers, quotes or results. `metrics`/`quote` must be real + verified.
+// `services` are service slugs. `published: false` placeholders never render as
+// pages (the loader resolves published only). Feeds CreativeWork schema (Phase 7).
+export interface CaseMetric {
+  label: string;
+  value: string;
+}
+export interface CaseQuote {
+  text: string;
+  author: string;
+  role: string;
+}
+export interface CaseStudy {
+  slug: string;
+  title: string;
+  client?: string; // may be anonymised, e.g. "D2C fashion label, UK"
+  industry: string;
+  region: string;
+  year?: number;
+  services: readonly string[]; // service slugs (see services[].slug)
+  summary: string;
+  challenge?: string;
+  approach?: string;
+  outcome?: string;
+  deliverables?: readonly string[];
+  stack?: readonly string[];
+  metrics?: readonly CaseMetric[]; // real, verified figures only
+  quote?: CaseQuote; // real quotes only
+  url?: string; // live site, if public
+  published: boolean;
 }
 
 export const site = {
@@ -161,6 +195,7 @@ export const site = {
   services: [
     {
       slug: "web-and-brand",
+      plans: ["launch", "grow"],
       name: "Web & Brand",
       short: "Custom-coded websites and brand identity from one team.",
       seoTitle: "Web design & branding studio — Aditeraction",
@@ -205,6 +240,7 @@ export const site = {
     },
     {
       slug: "product-app-engineering",
+      plans: ["one-roof"],
       name: "Product & App Engineering",
       short: "Custom web and app engineering, MVP to launch.",
       seoTitle: "Product & app engineering studio — Aditeraction",
@@ -250,6 +286,7 @@ export const site = {
     },
     {
       slug: "fashion-d2c",
+      plans: ["grow"],
       name: "Fashion & D2C",
       short: "Branding and custom storefronts for fashion and D2C.",
       seoTitle: "Fashion & D2C brand and website studio — Aditeraction",
@@ -294,6 +331,7 @@ export const site = {
     },
     {
       slug: "branding-packaging",
+      plans: ["launch", "grow", "one-roof"],
       name: "Branding & Packaging",
       short: "Logos, brand identity and packaging with intent.",
       seoTitle: "Branding & packaging design studio — Aditeraction",
@@ -336,6 +374,7 @@ export const site = {
     },
     {
       slug: "digital-marketing",
+      plans: ["grow", "one-roof"],
       name: "Digital Marketing",
       short: "SEO, social and ads by the team that built your site.",
       seoTitle: "Digital marketing for founders — Aditeraction",
@@ -377,6 +416,7 @@ export const site = {
     },
     {
       slug: "video",
+      plans: ["grow", "one-roof"],
       name: "Video",
       short: "Launch, brand and product video, in-house.",
       seoTitle: "Brand & product video studio — Aditeraction",
@@ -421,6 +461,18 @@ export const site = {
   // Industries we've delivered for (Phase 5d). Openness stays "any industry";
   // this is the delivered-for list only — no counts, no client names.
   industries: ["Fashion", "Textiles", "D2C", "Restaurants", "Real estate"],
+
+  // How we work (Phase 6b) — single source for the /about "How we work" list.
+  // Every line is from founder-supplied facts (payments, currencies, revisions,
+  // ownership, support/Care plan, communication). No invented figures.
+  howWeWork: [
+    { label: "Communication", body: "Email and video calls. We reply within 24 hours on working days and schedule calls to overlap your hours." },
+    { label: "Payment", body: "60% upfront to begin, 40% at launch." },
+    { label: "Currencies", body: "India: INR by bank transfer or UPI. International: USD, EUR or GBP via PayPal or Stripe." },
+    { label: "Revisions", body: "Two revision rounds included at no extra cost." },
+    { label: "Ownership", body: "Full ownership of your brand files, source code, domain and accounts once the final 40% is paid." },
+    { label: "Support", body: "One week of free support after launch, then the optional Care plan — up to 2 hours of changes a month, plus hosting, updates and performance checks." },
+  ],
 
   // Home page sections after the hero (Phase 4a). Single source of truth: the
   // section components read every string from here — no hardcoded copy in JSX.
@@ -587,15 +639,16 @@ export const site = {
     ],
   },
 
-  // Selected work (Phase 4b, section 6) — placeholder cards until real case
-  // studies exist. NO invented client names: titles/summaries are TODO(AB) and
-  // slugs are neutral + structural. Each links to /work/{slug}; "All work →"
-  // links to /work. (The /work/$slug route 404s until real data is added.)
+  // Selected work (Phase 4b/6b) — placeholder case studies until real projects
+  // land. NO invented clients, numbers, quotes or results: every field is a
+  // TODO(AB) placeholder and `published: false`, so none is reachable as a page
+  // (the /work/$slug loader resolves published only) and /work shows an honest
+  // empty state. `services` carry real slugs so the home grid can label the card.
   work: [
-    { slug: "project-one", title: "TODO(AB)", category: "Web & Brand", summary: "TODO(AB)" },
-    { slug: "project-two", title: "TODO(AB)", category: "Fashion & D2C", summary: "TODO(AB)" },
-    { slug: "project-three", title: "TODO(AB)", category: "Product & App Engineering", summary: "TODO(AB)" },
-  ],
+    { slug: "project-one", title: "TODO(AB)", industry: "TODO(AB)", region: "TODO(AB)", services: ["web-and-brand"], summary: "TODO(AB)", published: false },
+    { slug: "project-two", title: "TODO(AB)", industry: "TODO(AB)", region: "TODO(AB)", services: ["fashion-d2c"], summary: "TODO(AB)", published: false },
+    { slug: "project-three", title: "TODO(AB)", industry: "TODO(AB)", region: "TODO(AB)", services: ["product-app-engineering"], summary: "TODO(AB)", published: false },
+  ] satisfies CaseStudy[],
 
   // Plans (Phase 4c, section A) — three tiers, each quoted to scope (no prices
   // invented; see `plansNote`). `includesPrevious` drives the "Everything in
@@ -674,6 +727,7 @@ export const site = {
     eyebrow: "Let's talk",
     title: "Idea to launched.",
     body: "Tell us what you're building — brand, site, app, or all three. One team takes it from the first call to live.",
+    formEnabled: false, // Resend delivery parked — enable when form ships
   },
 
   // Primary navigation (header) — per 01-site-architecture.md §4.
@@ -712,4 +766,14 @@ export type Site = typeof site;
 
 export function getService(slug: string): ServiceDef | undefined {
   return site.services.find((s) => s.slug === slug);
+}
+
+/** Published case studies only — placeholders (published: false) are excluded. */
+export function getPublishedWork(): readonly CaseStudy[] {
+  return site.work.filter((w) => w.published);
+}
+
+/** Resolve a published case study by slug; undefined for unknown/unpublished. */
+export function getCaseStudy(slug: string): CaseStudy | undefined {
+  return site.work.find((w) => w.slug === slug && w.published);
 }
