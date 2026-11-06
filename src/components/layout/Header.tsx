@@ -44,7 +44,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" aria-label="Aditeraction, home" className="h-5">
-          <LogoHorizontal className="h-5" />
+          <LogoHorizontal className="h-5 text-paper" />
         </Link>
 
         {/* Desktop nav — all links present in SSR HTML */}

@@ -36,7 +36,7 @@ function About() {
       <p className="mt-6 max-w-2xl text-graphite">
         Aditeraction exists to help founders anywhere launch brands, sites and apps that look as good as
         their idea — by putting design and engineering under one roof and owning the journey from first
-        sketch to live product. You work directly with the founder, {site.founder}, not an account manager.
+        sketch to live product. You work directly with the founder, {site.founder.name}, not an account manager.
       </p>
 
       <div className="mt-14 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">

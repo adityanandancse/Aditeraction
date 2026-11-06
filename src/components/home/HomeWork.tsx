@@ -9,6 +9,12 @@ const { workSection } = site.home;
 // studies exist (titles/summaries are TODO(AB), no invented client names). The
 // image area is a neutral Fog block with a fixed aspect-ratio so it reserves
 // its space and never shifts layout. Ink surface, grid 1 / 2 / 3, fully SSR.
+//
+// Phase 4c fix: a card whose title is still the "TODO(AB)" placeholder renders
+// with NO link (no <a>, no /work/{slug} href) — only the "All work" link stays.
+// Once real titles land, each card becomes a link automatically.
+const PLACEHOLDER = "TODO(AB)";
+
 export function HomeWork() {
   return (
     <section
@@ -37,13 +43,15 @@ export function HomeWork() {
         </div>
 
         <ol className="mt-12 grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {site.work.map((item) => (
-            <Reveal as="li" key={item.slug} className="h-full">
-              <Link
-                to="/work/$slug"
-                params={{ slug: item.slug }}
-                className="group flex h-full flex-col border border-line transition-colors hover:border-line-strong focus-visible:border-line-strong"
-              >
+          {site.work.map((item) => {
+            const isPlaceholder = item.title === PLACEHOLDER;
+            const cardClass = `group flex h-full flex-col border border-line ${
+              isPlaceholder
+                ? ""
+                : "transition-colors hover:border-line-strong focus-visible:border-line-strong"
+            }`;
+            const inner = (
+              <>
                 {/* Fixed-ratio Fog placeholder — reserves space, zero CLS. */}
                 <span aria-hidden className="block aspect-[4/3] w-full bg-fog" />
                 <span className="flex flex-1 flex-col p-6">
@@ -54,14 +62,27 @@ export function HomeWork() {
                   <span className="mt-2 flex-1 text-sm leading-relaxed text-graphite">
                     {item.summary}
                   </span>
-                  <span className="mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-paper transition-colors group-hover:text-vermilion">
-                    View project
-                    <span aria-hidden>&rarr;</span>
-                  </span>
+                  {!isPlaceholder && (
+                    <span className="mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-paper transition-colors group-hover:text-vermilion">
+                      View project
+                      <span aria-hidden>&rarr;</span>
+                    </span>
+                  )}
                 </span>
-              </Link>
-            </Reveal>
-          ))}
+              </>
+            );
+            return (
+              <Reveal as="li" key={item.slug} className="h-full">
+                {isPlaceholder ? (
+                  <div className={cardClass}>{inner}</div>
+                ) : (
+                  <Link to="/work/$slug" params={{ slug: item.slug }} className={cardClass}>
+                    {inner}
+                  </Link>
+                )}
+              </Reveal>
+            );
+          })}
         </ol>
       </div>
     </section>

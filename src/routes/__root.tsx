@@ -57,6 +57,7 @@ export const Route = createRootRoute({
       // Dev only: external stylesheet (keeps CSS HMR). In prod the sheet is
       // inlined via `styles` below instead of a render-blocking <link>.
       ...(PROD ? [] : [{ rel: "stylesheet", href: appCssUrl }]),
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", href: "/icons/icon-32.png", sizes: "32x32" },
       { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },

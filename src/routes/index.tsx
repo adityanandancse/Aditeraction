@@ -6,6 +6,8 @@ import { HomePillars } from "~/components/home/HomePillars";
 import { HomeProcess } from "~/components/home/HomeProcess";
 import { HomeStats } from "~/components/home/HomeStats";
 import { HomeServices } from "~/components/home/HomeServices";
+import { HomePlans } from "~/components/home/HomePlans";
+import { HomeWhy } from "~/components/home/HomeWhy";
 import { HomeStack } from "~/components/home/HomeStack";
 import { HomeWork } from "~/components/home/HomeWork";
 import { HomeContact } from "~/components/home/HomeContact";
@@ -37,10 +39,12 @@ function Home() {
       <HomeProcess />
       <HomeStats />
 
-      {/* Phase 4b — services → stack → selected work → contact CTA. These
-          replace the earlier simple "What we do" grid; the footer (section 8)
-          lives in the root layout. */}
+      {/* Phase 4b/4c — services → plans → why → stack → selected work → contact.
+          These replace the earlier simple "What we do" grid; the footer
+          (section 8) lives in the root layout. */}
       <HomeServices />
+      <HomePlans />
+      <HomeWhy />
       <HomeStack />
       <HomeWork />
       <HomeContact />

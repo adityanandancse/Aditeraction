@@ -11,9 +11,11 @@ import {
   type MarkAttributes,
 } from "./sampleMark";
 import { heroGate } from "./heroDebug";
-// Sample the real brand master (read-only). Tiny; the <img> usages elsewhere use
-// the optimized copy, but the raster source stays on the master for fidelity.
-import markUrl from "../../../brand/aditeraction-symbol-on-dark.svg?url";
+// Sample the cleaned brand mark (brackets + nib). It uses currentColor for the
+// brackets, so when rasterised standalone they paint dark on transparent and the
+// nib paints Vermilion — classify() keys the nib off that Vermilion and treats
+// every other opaque pixel as a bracket (see sampleMark.ts).
+import markUrl from "~/assets/brand/mark.svg?url";
 
 const CHUNK = 500;
 const WORKER_TIMEOUT_MS = 4000;

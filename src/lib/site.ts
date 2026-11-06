@@ -7,6 +7,24 @@ export interface Faq {
   a: string;
 }
 
+// Founder profile (Phase 5a) — feeds About/Person schema in Phase 7. Facts only.
+export interface Founder {
+  name: string;
+  role: string;
+  since: number;
+  education: string;
+  location: string;
+  bio: string;
+}
+
+// Self-contained, answer-engine-ready block (Phase 5a). First sentence answers
+// directly and names "Aditeraction"; `words` is a 40–60 word check on `answer`.
+export interface AnswerBlock {
+  question: string;
+  answer: string;
+  words: number;
+}
+
 export interface ServiceDef {
   slug: string;
   name: string; // nav / card label (e.g. "Web + Brand")
@@ -38,11 +56,106 @@ export const site = {
   url: "https://aditeraction.com",
   tagline: "Idea to launched.", // never on the same visual line as the descriptor
   descriptor: "Brand, site, app. One roof.",
-  founder: "Aditya",
   email: "info@aditeraction.com",
+
+  // Founder (Phase 5a). Bio is founder-approved copy; `founder.name` replaces the
+  // old `founder: "Aditya"` string (see about.tsx / Footer.tsx usages).
+  founder: {
+    name: "Aditya",
+    role: "Founder",
+    since: 2019,
+    education: "B.Tech, Computer Science and Engineering",
+    location: "Noida, India",
+    bio: "Aditya is the founder of Aditeraction and has been building for the web since 2019. A B.Tech graduate in Computer Science and Engineering, he designs and builds brands, websites and apps for startups — work that has helped them grow sales and visibility. Aditeraction is based in Noida, India, and works with clients worldwide.",
+  } satisfies Founder,
   // Core message (real copy from brand context) — used on Home.
   coreMessage:
     "Aditeraction is a founder-led design-and-engineering studio. The same team designs your brand and writes the production code that ships it — so nothing is lost between a nice mockup and a live product. For founders in India and worldwide.",
+
+  // Answer-engine blocks (Phase 5a). Each is a self-contained 40–60 word answer
+  // whose first sentence answers the question directly and names "Aditeraction"
+  // (featured-snippet / AI-citation style). Data only — no UI until Phase 6/7.
+  answers: {
+    whatWeDo: {
+      question: "What does Aditeraction do?",
+      answer:
+        "Aditeraction is a founder-led design and engineering studio that takes founders from idea to launched brand, site and app. The same team designs the brand and writes the production code, so nothing is lost in handoff. We work with new businesses and established ones with no digital presence, worldwide.",
+      words: 49,
+    },
+    pricing: {
+      question: "How much does a project with Aditeraction cost?",
+      answer:
+        "Pricing is on request, and every Aditeraction project is quoted to its scope. What you pay depends on the scope of work, the number of pages or products, and how complex any app is. Payment splits 60% upfront and 40% at launch, so cost tracks the work.",
+      words: 47,
+    },
+    timelines: {
+      question: "How long does an Aditeraction project take?",
+      answer:
+        "A typical Aditeraction project runs three to sixteen weeks, depending on the plan. Launch (brand and site) takes 3–4 weeks; Grow (brand, site and reach) takes 6–8 weeks; One Roof (brand, site and app) takes 10–16 weeks, scoped after a discovery call. We set honest timelines up front.",
+      words: 48,
+    },
+  } satisfies Record<string, AnswerBlock>,
+
+  // Global FAQs (Phase 5a) — 14 Q&As, every answer 40–60 words, built only from
+  // founder-supplied facts. Rendered as a FAQ section + FAQPage schema later.
+  faqs: [
+    {
+      q: "What does Aditeraction do?",
+      a: "Aditeraction is a founder-led design and engineering studio. We design your brand and write the production code behind your website and apps, so one team takes you from idea to launched. We cover brand, site, app, marketing and video, with everything in between handled under one roof.",
+    },
+    {
+      q: "Who is Aditeraction for?",
+      a: "We work with founders and businesses that are either brand new, or established but with no digital presence yet. Industry doesn't matter, and we work across all of them. Clients are based in India and worldwide, so wherever you're starting from, Aditeraction can take you from idea to launched.",
+    },
+    {
+      q: "How much does a project cost?",
+      a: "Every project is quoted to its scope, so pricing is shared on request rather than as a fixed list. Your quote depends on the scope of work, the number of pages or products, and how complex any app is. We split payment 60% upfront and 40% at launch.",
+    },
+    {
+      q: "How long does a project take?",
+      a: "It depends on the plan. Launch, our brand and site plan, takes 3–4 weeks. Grow, which adds reach, takes 6–8 weeks. One Roof, which adds an app, takes 10–16 weeks and is scoped after a discovery call. We agree an honest timeline before we start.",
+    },
+    {
+      q: "What plans do you offer?",
+      a: "We offer three plans, each quoted to scope. Launch covers brand and site in 3–4 weeks. Grow adds reach (marketing and social media) in 6–8 weeks. One Roof adds a custom app in 10–16 weeks, scoped after a discovery call. Every plan includes two revision rounds.",
+    },
+    {
+      q: "How do payments work?",
+      a: "We split payment into two stages: 60% upfront to begin the work, and the remaining 40% at launch. This keeps things simple and ties each payment to real progress. You pay to start, then pay the balance when your brand, site or app goes live.",
+    },
+    {
+      q: "What currencies and payment methods do you accept?",
+      a: "In India, we invoice in INR and take payment by bank transfer or UPI. For international clients, we invoice in USD, EUR or GBP and take payment through PayPal or Stripe. Whichever applies, the 60% upfront and 40% at launch split stays the same.",
+    },
+    {
+      q: "How many revisions are included?",
+      a: "Every project includes two rounds of revisions at no extra cost. After we share work, you give feedback and we refine, twice, so the brand, site or app lands where you want it. If the scope itself changes, we talk it through and quote the extra work honestly.",
+    },
+    {
+      q: "Who owns the work once it's done?",
+      a: "You do. Once the final 40% is paid, you get full ownership of everything we make: the brand files, the source code, the domain and all accounts. Nothing is locked to us or held back. It's your business, so the work and the logins belong to you.",
+    },
+    {
+      q: "What support do you get after launch?",
+      a: "Every launch comes with one week of free support, so we're on hand to fix anything that surfaces as your brand, site or app goes live. After that week, you can keep us on through the optional Care plan, or simply reach out when you next need us.",
+    },
+    {
+      q: "Do you work with international clients across time zones?",
+      a: "Yes. We work with clients across India and worldwide. We keep in touch by email and video call, reply within 24 hours on working days, and schedule calls to overlap your hours, not ours. Distance and time zones don't change how closely we work with you.",
+    },
+    {
+      q: "Do you use templates or custom code?",
+      a: "Custom, always. We write our own code rather than dropping your business into a template or page builder, so the site or app is fast, built around your brand, and yours to own. It costs a little more thought up front, and it's why nothing we ship looks off-the-shelf.",
+    },
+    {
+      q: "What is the Care plan?",
+      a: "The Care plan is an optional monthly add-on that keeps your site or app healthy after launch. It covers hosting, updates, small changes and regular performance checks, so things stay fast and current without you having to think about them. You can add it to any plan, or skip it.",
+    },
+    {
+      q: "How do I get started?",
+      a: "Tell us what you're building. Email us or book a call, and we'll talk through your idea, your timeline and what launch needs to include. From there we scope the work and share a quote. Once you're happy and the 60% deposit lands, we start.",
+    },
+  ] satisfies readonly Faq[],
 
   // The 6 locked service lines (slugs from 01-site-architecture.md).
   services: [
@@ -72,9 +185,22 @@ export const site = {
         "Build — design the UI and write the responsive, custom code.",
         "Launch — go live with the CMS, SEO foundations and analytics in place.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "From 3–4 weeks",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does the Web + Brand service include?",
+          a: "Web + Brand covers both your identity and your website, built by one team. You get the brand (logo, colour and type system, guidelines) and a responsive, custom-coded site with a CMS, SEO foundations and analytics. Because the same team designs and builds, what you approve is what ships.",
+        },
+        {
+          q: "How long does a Web + Brand project take?",
+          a: "From 3–4 weeks for a focused brand and site, which lines up with our Launch plan. Larger sites with more pages, a bigger identity system or a store take longer, and we give you an honest timeline once we've scoped the pages, content and goals on a first call.",
+        },
+        {
+          q: "Do I own the website and brand files?",
+          a: "Yes. Once the final 40% is paid, the brand files, the source code, the domain and every account are yours in full. We build on custom code rather than a locked template, so you're never tied to us to host, edit or move your site later.",
+        },
+      ],
     },
     {
       slug: "product-app-engineering",
@@ -104,9 +230,22 @@ export const site = {
         "Build — design the UX and engineer the web and mobile app.",
         "Launch — deploy with payments, dashboards and monitoring live.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "From 10–16 weeks",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does Product & App Engineering include?",
+          a: "We design and engineer custom web and mobile apps, from first MVP to launched product. That spans product scoping, UX and UI, the web app, iOS and Android via Capacitor, auth and database, payments, admin dashboards, and deployment with monitoring. Design and code are handled by one team.",
+        },
+        {
+          q: "How long does it take to build an app?",
+          a: "10–16 weeks for a first version, scoped after a discovery call, which is our One Roof range. The exact timeline depends on how complex the app is: the number of features, the integrations, and whether it ships on web, iOS and Android. We set the plan together before we build.",
+        },
+        {
+          q: "Who owns the product and the code?",
+          a: "You own all of it. When the final 40% is paid, the full source code, accounts and any domains transfer to you. We write custom code rather than lock you into a platform, so your product stays yours to run, extend or hand to another team whenever you choose.",
+        },
+      ],
     },
     {
       slug: "fashion-d2c",
@@ -134,9 +273,22 @@ export const site = {
         "Build — design a custom theme and set up the storefront.",
         "Launch — go live with payments, lookbooks and a launch checklist.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "From 6–8 weeks",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does the Fashion & D2C service include?",
+          a: "We take fashion and D2C labels from identity to a storefront that sells. That covers branding and packaging, a custom Shopify or web store, catalogue and collections setup, payment gateway, size and measurement tools, lookbook pages and a launch checklist, all designed and built by one team.",
+        },
+        {
+          q: "How long does a D2C store take to launch?",
+          a: "Around 6–8 weeks, in line with our Grow plan, for branding plus a custom store ready to sell. The timeline moves with the size of your catalogue, the number of products and how custom the theme is. We confirm it once we've planned the store and launch on a first call.",
+        },
+        {
+          q: "Do you design the packaging as well as the store?",
+          a: "Yes. Fashion and D2C brands usually need both, so this service pairs packaging and label design with the storefront. One team keeps the label, the lookbook and the website speaking the same language, so what a customer sees online matches what lands at their door when the order arrives.",
+        },
+      ],
     },
     {
       slug: "branding-packaging",
@@ -163,9 +315,22 @@ export const site = {
         "Build — design the mark, system, packaging and guidelines.",
         "Launch — hand over print-ready files and social templates.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "Scoped on a discovery call",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does the Branding & Packaging service include?",
+          a: "You get a full identity built with intent: a logo and mark, a colour and type system, brand guidelines, labels and packaging, print-ready files and social templates. Every mark and surface is designed as a system you can build on, not a template that shows, and handed over ready to use.",
+        },
+        {
+          q: "How long does branding and packaging take?",
+          a: "It's scoped on a discovery call, because the timeline depends on how much you need: a single logo and guide moves quickly, a full identity with packaging and print files takes longer. Once we understand the brand, its audience and where it shows up, we give you an honest schedule.",
+        },
+        {
+          q: "Do I get print-ready files I can hand to a printer?",
+          a: "Yes. The handover includes print-ready files for your labels and packaging, plus social templates you can reuse. Once the final 40% is paid, all of it is yours to own and use anywhere (with a supplier, a printer or another designer), with no need to come back to us.",
+        },
+      ],
     },
     {
       slug: "digital-marketing",
@@ -191,9 +356,22 @@ export const site = {
         "Build — set up SEO, content, social and campaigns.",
         "Launch — run, measure and report against the outcome.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "Scoped on a discovery call",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does the Digital Marketing service include?",
+          a: "The team that built your brand and site runs the marketing too: SEO, AEO and GEO, content strategy, social media management, ad campaign setup, and analytics with reporting. Because we own the whole picture, the marketing matches the product and points at real outcomes rather than vanity numbers.",
+        },
+        {
+          q: "How long before I see results from marketing?",
+          a: "Marketing is scoped on a discovery call, because the work and the timeline depend on your goals and channels. We agree what success looks like up front, then set up SEO, content, social and campaigns, and report against that outcome. We say straight what's realistic rather than promising overnight numbers.",
+        },
+        {
+          q: "Can you handle marketing if you didn't build my site?",
+          a: "Yes, though we're at our best when the marketing sits on a brand and site we also built, because nothing is lost between them. Either way, we agree goals and channels on a discovery call, set up the work, and report honestly on what's moving and what isn't.",
+        },
+      ],
     },
     {
       slug: "video",
@@ -219,9 +397,22 @@ export const site = {
         "Build — shoot or create, then edit, grade and add motion.",
         "Launch — deliver cuts sized for every channel.",
       ],
-      timeline: "TODO(AB)",
-      pricing: "TODO(AB)",
-      faqs: [],
+      timeline: "Scoped on a discovery call",
+      pricing: "On request",
+      faqs: [
+        {
+          q: "What does the Video service include?",
+          a: "We make launch films, brand video, product videos, reels and short-form, plus motion graphics, editing and colour, all in-house, from the studio that already ships your site and brand. One team and one timeline keep the film speaking the same language as everything else you put in front of customers.",
+        },
+        {
+          q: "How long does a video project take?",
+          a: "It's scoped on a discovery call, because a single product reel and a full launch film are very different jobs. Once we know the story, the format and where it runs, we give you an honest timeline for the shoot or build, then editing, grading and motion.",
+        },
+        {
+          q: "Will the video match the rest of my brand?",
+          a: "That's the point of keeping it in-house. Because the same studio makes your brand, site and video, the film uses the same identity, type and tone as everything else. You get cuts sized for every channel, all speaking one language rather than looking like they came from three suppliers.",
+        },
+      ],
     },
   ] satisfies ServiceDef[],
 
@@ -312,6 +503,41 @@ export const site = {
       title: "Recent work.",
       allLabel: "All work",
     },
+
+    // 4c (A) — Plans section heading. The cards come from the top-level `plans`
+    // array; only the heading copy lives here (matches servicesSection/workSection).
+    plansSection: {
+      eyebrow: "Plans",
+      title: "Pick the plan that fits.",
+    },
+
+    // 4c (B) — Why Aditeraction. Numbered reasons (01–05), one line each.
+    why: {
+      eyebrow: "Why us",
+      title: "One owner. Brand to code.",
+      points: [
+        {
+          title: "One owner, brand to code",
+          body: "The person who shapes your brand builds your site. Nothing gets lost in handoffs.",
+        },
+        {
+          title: "Fast",
+          body: "Launch in weeks, not quarters.",
+        },
+        {
+          title: "Built properly",
+          body: "Custom code, not templates. Fast, accessible and search-ready from day one.",
+        },
+        {
+          title: "Founder-run",
+          body: "We run businesses ourselves, so we build for revenue, not awards.",
+        },
+        {
+          title: "Everything in between",
+          body: "Domain, email, hosting, profiles and launch — handled. Two revision rounds are included at no extra cost.",
+        },
+      ],
+    },
   },
 
   // Stack (Phase 4b, section 5) — replaces the old "8 pillars". Text only, no
@@ -343,6 +569,75 @@ export const site = {
     { slug: "project-two", title: "TODO(AB)", category: "Fashion & D2C", summary: "TODO(AB)" },
     { slug: "project-three", title: "TODO(AB)", category: "Product & App Engineering", summary: "TODO(AB)" },
   ],
+
+  // Plans (Phase 4c, section A) — three tiers, each quoted to scope (no prices
+  // invented; see `plansNote`). `includesPrevious` drives the "Everything in
+  // {previous plan}, plus:" line. ctaHref carries the chosen plan to /contact.
+  plans: [
+    {
+      id: "launch",
+      name: "Launch",
+      label: "Brand + site",
+      forWho: "For businesses starting from zero that need to look real online.",
+      includesPrevious: false,
+      items: [
+        "Logo/mark, colour & type system, one-page brand guide",
+        "Website up to 5 pages, responsive and fast",
+        "Domain, business email & hosting setup",
+        "SEO basics: metadata, sitemap, Search Console, analytics",
+        "Google Business Profile + 2 social profiles set up",
+      ],
+      timeline: "3–4 weeks",
+      ctaLabel: "Get a quote",
+      ctaHref: "/contact?plan=launch",
+    },
+    {
+      id: "grow",
+      name: "Grow",
+      label: "Brand + site + reach",
+      forWho: "For businesses ready to sell and be found.",
+      includesPrevious: true,
+      items: [
+        "Full identity system with brand guidelines",
+        "Website up to 12 pages with CMS/blog, or a Shopify store",
+        "SEO/AEO/GEO foundations: schema, content plan, answer-ready FAQs",
+        "Social template kit + reels/short-video pack",
+        "1 month of social media management and reporting",
+      ],
+      timeline: "6–8 weeks",
+      ctaLabel: "Get a quote",
+      ctaHref: "/contact?plan=grow",
+    },
+    {
+      id: "one-roof",
+      name: "One Roof",
+      label: "Brand + site + app",
+      forWho: "For businesses that need a real product built.",
+      includesPrevious: true,
+      items: [
+        "Custom web app or iOS/Android app (first version)",
+        "Auth, database, payments, admin dashboard",
+        "Packaging & label design",
+        "Brand film or product video",
+        "3 months of marketing and SEO",
+      ],
+      timeline: "10–16 weeks, scoped after a discovery call",
+      ctaLabel: "Get a quote",
+      ctaHref: "/contact?plan=one-roof",
+    },
+  ],
+
+  // Optional add-on offered with any plan (shown below the plans grid).
+  plansAddon: {
+    name: "Care plan",
+    body: "Monthly hosting, updates, small changes and performance checks — available with any plan.",
+  },
+
+  // Pricing is always quoted to scope — never a fabricated number.
+  plansNote: "Pricing on request — every project is quoted to its scope.",
+
+  // Shown beside plansNote — reassures that revisions are built into every plan.
+  plansRevisions: "Every plan includes 2 revision rounds at no extra cost.",
 
   // Contact CTA (Phase 4b, section 7). The tagline "Idea to launched." is used
   // as the heading here — kept on its own line, never beside the descriptor.

@@ -7,10 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-// Fallback is inlined (?raw) so it is NOT an LCP candidate — the H1 is. The small
-// status-log mark stays an <img> (?url): far below 1/4 of the H1's area.
-import symbolRaw from "~/assets/brand/aditeraction-symbol-on-dark.svg?raw";
-import symbolUrl from "~/assets/brand/aditeraction-symbol-on-dark.svg?url";
+// Fallback is inlined (?raw) so it is NOT an LCP candidate — the H1 is. The mark
+// uses currentColor for the brackets, so the surrounding `text-paper` paints them
+// Paper on the Ink hero (the nib stays Vermilion). The small status-log mark is the
+// same markup inlined — it must be inline, not an <img>, for currentColor to resolve.
+import markRaw from "~/assets/brand/mark.svg?raw";
 import { heroGate } from "./heroDebug";
 import { HeroDebugOverlay } from "./HeroDebugOverlay";
 
@@ -133,8 +134,8 @@ export function Landing() {
             (not <img>) so it is never chosen as the LCP element. */}
         <div className="hero-fallback absolute inset-0 pointer-events-none" aria-hidden="true">
           <span
-            className="absolute left-1/2 top-[34%] w-[min(46vw,620px)] aspect-square -translate-x-1/2 -translate-y-1/2 min-[900px]:left-[60%] min-[900px]:top-1/2 [&_svg]:block [&_svg]:h-full [&_svg]:w-full"
-            dangerouslySetInnerHTML={{ __html: symbolRaw }}
+            className="absolute left-1/2 top-[34%] w-[min(46vw,620px)] aspect-square -translate-x-1/2 -translate-y-1/2 text-paper min-[900px]:left-[60%] min-[900px]:top-1/2 [&_svg]:block [&_svg]:h-full [&_svg]:w-full"
+            dangerouslySetInnerHTML={{ __html: markRaw }}
           />
         </div>
 
@@ -176,13 +177,10 @@ export function Landing() {
                 Design and engineering under one roof — for founders who want to launch, not wait.
               </p>
               <div className="hidden items-center gap-3 min-[900px]:flex">
-                <img
-                  src={symbolUrl}
-                  alt=""
-                  width={28}
-                  height={28}
-                  decoding="async"
-                  className="h-7 aspect-square shrink-0"
+                <span
+                  aria-hidden="true"
+                  className="h-7 w-7 shrink-0 text-paper [&_svg]:block [&_svg]:h-full [&_svg]:w-full"
+                  dangerouslySetInnerHTML={{ __html: markRaw }}
                 />
                 <div className="font-mono text-[13px] leading-relaxed text-graphite">
                   <div>&gt; studio: open for projects</div>

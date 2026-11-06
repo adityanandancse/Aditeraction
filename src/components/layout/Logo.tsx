@@ -1,17 +1,19 @@
-// The primary horizontal lockup, inlined ONCE (the header, above the fold) from
-// the svgo-optimized copy in src/assets/brand (the brand/ masters are read-only).
-// Imported as a raw SVG string so the rendered markup is the exact asset, not a
-// hand-drawn approximation; it already carries role="img" aria-label="Aditeraction".
-// Every other placement (footer, hero) uses an <img> of the optimized file so the
-// same SVG markup is never re-inlined.
-import horizontalSvg from "~/assets/brand/aditeraction-logo-horizontal-on-dark.svg?raw";
+// The primary horizontal lockup (mark + wordmark), inlined from the cleaned asset
+// in src/assets/brand (the brand/ masters are read-only). Imported as a raw SVG
+// string so the rendered markup is the exact asset; it carries role="img"
+// aria-label="Aditeraction". The SVG uses `currentColor` for the wordmark and
+// brackets, so the caller controls the colour via text colour: Paper on Ink
+// surfaces (`text-paper`), Ink on Paper surfaces (`text-ink`). The nib and i-dots
+// stay Vermilion. The svg has no width/height (viewBox 8980:995) so CSS sets the
+// height and the width follows the aspect ratio.
+import logoSvg from "~/assets/brand/logo.svg?raw";
 
-/** The primary horizontal lockup (symbol + wordmark) for dark surfaces. */
+/** The primary horizontal lockup (mark + wordmark). Inherits colour via currentColor. */
 export function LogoHorizontal({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex [&_svg]:block [&_svg]:h-full [&_svg]:w-auto ${className}`}
-      dangerouslySetInnerHTML={{ __html: horizontalSvg }}
+      className={`inline-flex text-current [&_svg]:block [&_svg]:h-full [&_svg]:w-auto ${className}`}
+      dangerouslySetInnerHTML={{ __html: logoSvg }}
     />
   );
 }

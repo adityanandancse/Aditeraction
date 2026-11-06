@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { site } from "~/lib/site";
 import { Reveal } from "~/components/motion/Reveal";
-import logoHorizontalUrl from "~/assets/brand/aditeraction-logo-horizontal-on-dark.svg?url";
+import { LogoHorizontal } from "./Logo";
 
 const colTitle = "font-mono text-[11px] uppercase tracking-[0.14em] text-graphite";
 const colLink = "text-sm text-paper/80 transition-colors hover:text-vermilion";
@@ -16,15 +16,7 @@ export function Footer() {
           {/* Brand block */}
           <Reveal className="col-span-2 md:col-span-1">
             <Link to="/" aria-label="Aditeraction, home" className="inline-flex h-5">
-              <img
-                src={logoHorizontalUrl}
-                alt="Aditeraction"
-                width={340}
-                height={52}
-                decoding="async"
-                loading="lazy"
-                className="h-5 w-auto"
-              />
+              <LogoHorizontal className="h-5 text-paper" />
             </Link>
             {/* Tagline and descriptor NEVER on the same visual line. */}
             <p className="mt-5 font-display text-lg tracking-[-0.03em] text-paper">
@@ -100,7 +92,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] uppercase tracking-[0.1em] text-graphite sm:flex-row sm:items-center sm:justify-between">
           <span>
-            © {year} {site.name}. Founder-led, {site.founder}.
+            © {year} {site.name}. Founder-led, {site.founder.name}.
           </span>
           <span>India &amp; worldwide</span>
         </div>

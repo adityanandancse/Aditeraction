@@ -3,8 +3,10 @@
 // elsewhere; here we only classify pixels and build the GPU attributes. Keeping
 // the rules in one place means the worker and fallback can never drift.
 //
-// Classification (symbol-on-dark.svg): brackets are light (#F4F1EC), the nib is
-// Vermilion (#FF4D2E). The dark nib hole/slit is transparent and ignored.
+// Classification (mark.svg): the nib + i-dots are Vermilion (#FF4D2E); the bracket
+// strokes use currentColor, which rasterises dark on transparent when the SVG is
+// drawn standalone. So we key the nib off Vermilion and treat every other opaque
+// pixel as a bracket. Fully transparent pixels (background) are ignored.
 
 export interface MarkAttributes {
   position: Float32Array; // N*3 sphere start positions
@@ -44,10 +46,9 @@ export function classify(data: Uint8ClampedArray, w: number, h: number): Classif
       const r = data[i]!;
       const g = data[i + 1]!;
       const b = data[i + 2]!;
-      let cls = 0; // 1 = bracket, 2 = nib
-      if (r > 200 && g < 140 && b < 120) cls = 2;
-      else if (r > 200 && g > 200 && b > 200) cls = 1;
-      else continue;
+      // Vermilion (nib + i-dots) = 2; any other opaque pixel (the currentColor
+      // bracket strokes, which rasterise dark) = 1.
+      const cls = r > 200 && g < 140 && b < 120 ? 2 : 1;
 
       if (x < minX) minX = x;
       if (x > maxX) maxX = x;
