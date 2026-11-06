@@ -196,6 +196,44 @@ main#main {
 }
 
 /* ---------------------------------------------------------------------------
+   WORLD REACH (Phase 5c) — arcs draw in when the map enters view; Noida pulses.
+   CSS only, no rAF. Content is fully visible by default: the undrawn start state
+   applies ONLY under .js + no-preference (matching the reveal system), so SSR,
+   no-JS and reduced-motion users see every arc fully drawn and no pulse. The
+   Reveal wrapper around the map provides the `data-revealed` trigger.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js #reach .reach-arc {
+    stroke-dasharray: 1; /* pathLength="1" → length-agnostic draw-in */
+    stroke-dashoffset: 1;
+  }
+  .js #reach [data-revealed] .reach-arc {
+    animation: reach-draw 1.2s ease forwards;
+    animation-delay: var(--arc-delay, 0ms);
+  }
+  .js #reach [data-revealed] .reach-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: reach-pulse 2.4s ease-out infinite;
+  }
+}
+@keyframes reach-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes reach-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    CONTAINMENT & RENDER SKIPPING (perf).
    - .adx-contain isolates the hero's layout/paint/style from the rest of the
      page so scroll-driven canvas repaints never invalidate document layout.

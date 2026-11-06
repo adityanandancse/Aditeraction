@@ -4,7 +4,7 @@ import { Landing } from "~/components/landing/Landing";
 import { IntroLoader } from "~/components/landing/IntroLoader";
 import { HomePillars } from "~/components/home/HomePillars";
 import { HomeProcess } from "~/components/home/HomeProcess";
-import { HomeStats } from "~/components/home/HomeStats";
+import { HomeReach } from "~/components/home/HomeReach";
 import { HomeServices } from "~/components/home/HomeServices";
 import { HomePlans } from "~/components/home/HomePlans";
 import { HomeWhy } from "~/components/home/HomeWhy";
@@ -34,10 +34,12 @@ function Home() {
       <Landing />
 
       {/* Phase 4a — home sections after the hero (copy lives in site.ts.home):
-          Brand/Site/App pillars → how it works → at a glance. */}
+          Brand/Site/App pillars → how it works → world reach. The old "At a
+          glance" stats section (HomeStats) is hidden until real figures exist
+          (Phase 5c); HomeReach now fills this slot. */}
       <HomePillars />
       <HomeProcess />
-      <HomeStats />
+      <HomeReach />
 
       {/* Phase 4b/4c — services → plans → why → stack → selected work → contact.
           These replace the earlier simple "What we do" grid; the footer

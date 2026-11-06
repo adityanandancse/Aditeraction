@@ -27,13 +27,13 @@ export interface AnswerBlock {
 
 export interface ServiceDef {
   slug: string;
-  name: string; // nav / card label (e.g. "Web + Brand")
+  name: string; // nav / card label (e.g. "Web & Brand")
   short: string; // one-line nav/footer description
   seoTitle: string; // <title> — pattern from 02-seo-plan.md
   seoDescription: string; // meta description — from 02-seo-plan.md
   intro: string; // real on-page paragraph (no lorem ipsum)
   // Phase 4b additions — the full service data model, reused by Phase 6 pages.
-  title: string; // short display title for cards/service page (e.g. "Websites")
+  title: string; // canonical display name, matches `name` (e.g. "Web & Brand")
   summary: string; // one-line summary
   forWho: string; // one-line "who it's for"
   deliverables: readonly string[];
@@ -141,7 +141,7 @@ export const site = {
     },
     {
       q: "Do you work with international clients across time zones?",
-      a: "Yes. We work with clients across India and worldwide. We keep in touch by email and video call, reply within 24 hours on working days, and schedule calls to overlap your hours, not ours. Distance and time zones don't change how closely we work with you.",
+      a: "Yes. We work with clients in the UAE, UK, USA, Canada, Australia, Singapore and across India. We keep in touch by email and video call, reply within 24 hours on working days, and schedule calls to overlap your hours, not ours. Time zones don't change how closely we work with you.",
     },
     {
       q: "Do you use templates or custom code?",
@@ -153,7 +153,7 @@ export const site = {
     },
     {
       q: "How do I get started?",
-      a: "Tell us what you're building. Email us or book a call, and we'll talk through your idea, your timeline and what launch needs to include. From there we scope the work and share a quote. Once you're happy and the 60% deposit lands, we start.",
+      a: "Tell us what you're building. Email us at info@aditeraction.com, and we'll talk through your idea, your timeline and what launch needs to include. From there we scope the work and share a quote. Once you're happy and the 60% deposit lands, we start.",
     },
   ] satisfies readonly Faq[],
 
@@ -161,17 +161,18 @@ export const site = {
   services: [
     {
       slug: "web-and-brand",
-      name: "Web + Brand",
+      name: "Web & Brand",
       short: "Custom-coded websites and brand identity from one team.",
       seoTitle: "Web design & branding studio — Aditeraction",
       seoDescription:
         "Custom-coded websites and brand identity from one team — no handoff, no templates. Idea to launched for founders, India and worldwide.",
       intro:
         "Your brand and your website, designed and built by one team. We draw the identity and write the production code, so what you approve in design is what ships — no handoff, no templates, no drift between mockup and live site.",
-      title: "Websites",
+      title: "Web & Brand",
       summary: "Custom-coded websites, designed and built by one team.",
       forWho: "Founders who need a site that looks premium and loads fast — not a template.",
       deliverables: [
+        "Logo & brand essentials (mark, colour & type system, brand guide)",
         "Sitemap & content plan",
         "UI design",
         "Responsive build",
@@ -189,11 +190,11 @@ export const site = {
       pricing: "On request",
       faqs: [
         {
-          q: "What does the Web + Brand service include?",
-          a: "Web + Brand covers both your identity and your website, built by one team. You get the brand (logo, colour and type system, guidelines) and a responsive, custom-coded site with a CMS, SEO foundations and analytics. Because the same team designs and builds, what you approve is what ships.",
+          q: "What does the Web & Brand service include?",
+          a: "Web & Brand covers both your identity and your website, built by one team. You get the brand (logo, colour and type system, guidelines) and a responsive, custom-coded site with a CMS, SEO foundations and analytics. Because the same team designs and builds, what you approve is what ships.",
         },
         {
-          q: "How long does a Web + Brand project take?",
+          q: "How long does a Web & Brand project take?",
           a: "From 3–4 weeks for a focused brand and site, which lines up with our Launch plan. Larger sites with more pages, a bigger identity system or a store take longer, and we give you an honest timeline once we've scoped the pages, content and goals on a first call.",
         },
         {
@@ -211,7 +212,7 @@ export const site = {
         "Custom web and app engineering (React, SSR) for founders — MVP to launch. Design and code under one roof. India and worldwide.",
       intro:
         "Custom web and app engineering, from first MVP to launched product. We design what we can build and build what we design, so the product you ship feels as considered as the pitch — fast, custom-coded, and ready for real users.",
-      title: "Web & mobile apps",
+      title: "Product & App Engineering",
       summary: "Custom web and mobile app engineering, from MVP to launch.",
       forWho: "Founders building a product who want design and engineering in one team.",
       deliverables: [
@@ -230,7 +231,7 @@ export const site = {
         "Build — design the UX and engineer the web and mobile app.",
         "Launch — deploy with payments, dashboards and monitoring live.",
       ],
-      timeline: "From 10–16 weeks",
+      timeline: "10–16 weeks",
       pricing: "On request",
       faqs: [
         {
@@ -256,10 +257,11 @@ export const site = {
         "Branding, packaging and custom Shopify/web for fashion and D2C founders. One team, idea to launched. India and worldwide.",
       intro:
         "Branding, packaging and custom storefronts for fashion and D2C founders. One team takes the label from identity to a storefront that sells — considered, fast and built to look as premium as the product inside.",
-      title: "Fashion & D2C commerce",
+      title: "Fashion & D2C",
       summary: "Branding and custom storefronts for fashion and D2C labels.",
       forWho: "Fashion and D2C founders launching a store that has to sell and look premium.",
       deliverables: [
+        "Labels & packaging design",
         "Shopify store",
         "Custom theme",
         "Catalogue & collections setup",
@@ -299,7 +301,7 @@ export const site = {
         "Logos, brand identity and packaging that look as good as your idea. Founder-led, premium craft, accessible pricing. India and worldwide.",
       intro:
         "Logos, brand identity and packaging that look as good as your idea. Every mark, colour and surface is intentional — a system you can build on, not a template that shows. Premium craft at a lean studio's pace.",
-      title: "Brand identity & packaging",
+      title: "Branding & Packaging",
       summary: "Logos, identity systems and packaging built with intent.",
       forWho: "Founders who need a brand that looks as good as the idea behind it.",
       deliverables: [
@@ -341,7 +343,7 @@ export const site = {
         "SEO, social and ads run by the team that built your brand and site. Honest, measurable, founder-led. India and worldwide.",
       intro:
         "SEO, social and ads run by the same team that built your brand and site. Because we own the whole picture, the marketing matches the product — honest, measurable, and pointed at the outcome rather than vanity numbers.",
-      title: "Growth",
+      title: "Digital Marketing",
       summary: "SEO, content, social and ads run by the team that built your site.",
       forWho: "Founders who want marketing that matches the product, not vanity metrics.",
       deliverables: [
@@ -382,7 +384,7 @@ export const site = {
         "Launch, brand and product video from the studio that ships your site and brand. One team, one timeline. India and worldwide.",
       intro:
         "Launch films, brand video and product motion from the studio that already ships your site and brand. One team and one timeline, so the film speaks the same language as everything else you put in front of customers.",
-      title: "Video & motion",
+      title: "Video",
       summary: "Brand films, product videos and motion, in-house.",
       forWho: "Founders who need video that speaks the same language as the brand.",
       deliverables: [
@@ -438,7 +440,7 @@ export const site = {
           title: "Site",
           body: "Custom-coded websites, designed and built by one team. What you approve in design is what ships — no handoff, no drift.",
           slug: "web-and-brand",
-          linkLabel: "Web + Brand",
+          linkLabel: "Web & Brand",
         },
         {
           index: "03",
@@ -473,9 +475,9 @@ export const site = {
       ],
     },
 
-    // 3 — At a glance. Values are placeholders ("—") until real figures are
-    // confirmed by AB. NEVER invent numbers — each tile is marked TODO(AB) in
-    // HomeStats.tsx. Labels are stable; only the value strings change later.
+    // 3 — At a glance. KEPT AS DATA but NOT rendered (Phase 5c): HomeReach now
+    // occupies this slot. Re-enable HomeStats once real figures exist — values are
+    // placeholders ("—") until then, never invented.
     stats: {
       eyebrow: "At a glance",
       title: "The studio, in short.",
@@ -485,6 +487,27 @@ export const site = {
         { value: "—", label: "Countries worked across" },
         { value: "—", label: "Services under one roof" },
         { value: "—", label: "Avg. weeks to launch" },
+      ],
+    },
+
+    // 3 (Phase 5c) — World reach. Replaces the stats section in the same slot.
+    // Dotted world map (src/assets/world-dots.svg) + animated arcs from Noida to
+    // each client region, projected via src/lib/worldProjection.ts. Facts only:
+    // based in Noida; clients in UAE, UK, USA, Canada, Australia, Singapore and
+    // across India. No counts. `local: true` → ring around Noida, not an arc.
+    reach: {
+      eyebrow: "Worldwide",
+      title: "Based in Noida. Working worldwide.",
+      body: "We work with founders across India and around the world — from the first call to launch, across time zones.",
+      origin: { label: "Noida, India", lat: 28.54, lng: 77.39 },
+      regions: [
+        { label: "Across India", lat: 21.0, lng: 78.0, local: true },
+        { label: "UAE", lat: 24.4, lng: 54.4 },
+        { label: "UK", lat: 52.5, lng: -1.5 },
+        { label: "USA", lat: 39.5, lng: -98.4 },
+        { label: "Canada", lat: 56.1, lng: -106.3 },
+        { label: "Australia", lat: -25.3, lng: 133.8 },
+        { label: "Singapore", lat: 1.35, lng: 103.82 },
       ],
     },
 
@@ -565,7 +588,7 @@ export const site = {
   // slugs are neutral + structural. Each links to /work/{slug}; "All work →"
   // links to /work. (The /work/$slug route 404s until real data is added.)
   work: [
-    { slug: "project-one", title: "TODO(AB)", category: "Web + Brand", summary: "TODO(AB)" },
+    { slug: "project-one", title: "TODO(AB)", category: "Web & Brand", summary: "TODO(AB)" },
     { slug: "project-two", title: "TODO(AB)", category: "Fashion & D2C", summary: "TODO(AB)" },
     { slug: "project-three", title: "TODO(AB)", category: "Product & App Engineering", summary: "TODO(AB)" },
   ],
@@ -671,9 +694,14 @@ export const site = {
     legal: ["Privacy", "Terms"],
   },
 
-  // Social profiles — NEVER invent URLs or handles. Renders nothing until real
-  // entries are added here. TODO(AB): add { label, href } once confirmed.
-  socials: [] as { label: string; href: string }[],
+  // Social profiles — confirmed accounts. Footer renders these as text links with
+  // rel="me noopener" target="_blank"; they also feed Organization `sameAs` (Phase 7).
+  socials: [
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/aditeraction" },
+    { label: "Instagram", href: "https://www.instagram.com/aditeraction/" },
+    { label: "Facebook", href: "https://www.facebook.com/aditeraction/" },
+    { label: "Pinterest", href: "https://www.pinterest.com/aditeraction/" },
+  ] as { label: string; href: string }[],
 } as const;
 
 export type Site = typeof site;
