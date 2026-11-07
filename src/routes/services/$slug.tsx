@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { getService, site } from "~/lib/site";
+import { serviceGraph } from "~/lib/schema";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { BracketLink } from "~/components/ui/BracketLink";
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/services/$slug")({
       title: loaderData?.seoTitle ?? "Services",
       description: loaderData?.seoDescription ?? site.coreMessage,
       path: loaderData ? `/services/${loaderData.slug}` : "/services",
+      graph: loaderData ? serviceGraph(loaderData) : undefined,
     }),
   component: ServicePage,
 });

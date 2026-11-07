@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
-import { site } from "~/lib/site";
+import { site, pickFaqs } from "~/lib/site";
+import { servicesHubGraph } from "~/lib/schema";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { Reveal } from "~/components/motion/Reveal";
@@ -17,19 +18,10 @@ const { servicesSection, plansSection } = site.home;
 const whatWeDo = site.answers.whatWeDo;
 const hubDescription = `${whatWeDo.answer.split(". ")[0]}.`;
 
-// Hub FAQ subset (cost, how long, plans, payments, ownership, revisions), pulled
-// from the global FAQs by question so there is one source of truth.
-const HUB_FAQ_QS = [
-  "How much does a project cost?",
-  "How long does a project take?",
-  "What plans do you offer?",
-  "How do payments work?",
-  "Who owns the work once it's done?",
-  "How many revisions are included?",
-] as const;
-const hubFaqs = HUB_FAQ_QS.map((q) => site.faqs.find((f) => f.q === q)).filter(
-  (f): f is (typeof site.faqs)[number] => Boolean(f),
-);
+// Hub FAQ subset (cost, how long, plans, payments, ownership, revisions) — the
+// question list lives in site.faqGroups.hub so the rendered FaqList and the
+// FAQPage JSON-LD stay in lock-step.
+const hubFaqs = pickFaqs(site.faqGroups.hub);
 
 export const Route = createFileRoute("/services/")({
   head: () =>
@@ -37,6 +29,7 @@ export const Route = createFileRoute("/services/")({
       title: "Services — brand, web, apps, D2C, marketing | Aditeraction",
       description: hubDescription,
       path: "/services",
+      graph: servicesHubGraph(),
     }),
   component: ServicesHub,
 });

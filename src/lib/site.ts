@@ -191,6 +191,25 @@ export const site = {
     },
   ] satisfies readonly Faq[],
 
+  // Which global FAQs render on which page (single source for both the rendered
+  // FaqList and the FAQPage JSON-LD, so schema ↔ page parity can't drift).
+  faqGroups: {
+    hub: [
+      "How much does a project cost?",
+      "How long does a project take?",
+      "What plans do you offer?",
+      "How do payments work?",
+      "Who owns the work once it's done?",
+      "How many revisions are included?",
+    ],
+    contact: [
+      "How do I get started?",
+      "How do payments work?",
+      "What currencies and payment methods do you accept?",
+      "Do you work with international clients across time zones?",
+    ],
+  },
+
   // The 6 locked service lines (slugs from 01-site-architecture.md).
   services: [
     {
@@ -727,7 +746,10 @@ export const site = {
     eyebrow: "Let's talk",
     title: "Idea to launched.",
     body: "Tell us what you're building — brand, site, app, or all three. One team takes it from the first call to live.",
-    formEnabled: false, // Resend delivery parked — enable when form ships
+    formEnabled: true, // enquiry form live (Resend delivery via server function)
+    formFrom: "Aditeraction Website <forms@mail.aditeraction.com>",
+    formTo: "info@aditeraction.com",
+    confirmFrom: "Aditya at Aditeraction <hello@mail.aditeraction.com>", // submitter confirmation
   },
 
   // Primary navigation (header) — per 01-site-architecture.md §4.
@@ -776,4 +798,11 @@ export function getPublishedWork(): readonly CaseStudy[] {
 /** Resolve a published case study by slug; undefined for unknown/unpublished. */
 export function getCaseStudy(slug: string): CaseStudy | undefined {
   return site.work.find((w) => w.slug === slug && w.published);
+}
+
+/** Resolve a list of FAQ question strings to the matching global FAQ objects. */
+export function pickFaqs(questions: readonly string[]): Faq[] {
+  return questions
+    .map((q) => site.faqs.find((f) => f.q === q))
+    .filter((f): f is (typeof site.faqs)[number] => Boolean(f));
 }

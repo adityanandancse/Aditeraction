@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
+import { homeGraph } from "~/lib/schema";
 import { Landing } from "~/components/landing/Landing";
 import { IntroLoader } from "~/components/landing/IntroLoader";
 import { HomePillars } from "~/components/home/HomePillars";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/")({
       description:
         "A founder-led studio that takes you from idea to launched brand, site and app. Design and code under one roof — India and worldwide. Start a project.",
       path: "/",
+      graph: homeGraph(),
     }),
   component: Home,
 });

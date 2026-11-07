@@ -1,0 +1,4 @@
+# Cloudflare Worker secrets for local dev (copy to .dev.vars — which is gitignored).
+# Get a key at https://resend.com → API Keys. In production, set it with:
+#   wrangler secret put RESEND_API_KEY
+RESEND_API_KEY=

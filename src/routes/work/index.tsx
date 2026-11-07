@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { site, getPublishedWork } from "~/lib/site";
+import { workHubGraph } from "~/lib/schema";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { Reveal } from "~/components/motion/Reveal";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/work/")({
       title: "Work — Brand, Web & App Projects | Aditeraction",
       description: `Brand, website and app projects for founders across ${industriesText}. India, UK, USA, UAE and worldwide.`,
       path: "/work",
+      graph: workHubGraph(),
     });
     // Thin page while no case studies are published: keep it out of the index but
     // let crawlers follow links. This branch disappears once one item is published.

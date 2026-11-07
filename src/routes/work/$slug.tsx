@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { getCaseStudy, getPublishedWork, getService, type CaseStudy } from "~/lib/site";
+import { caseStudyGraph } from "~/lib/schema";
 import { Breadcrumbs, type Crumb } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { BracketLink } from "~/components/ui/BracketLink";
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/work/$slug")({
       title,
       description: loaderData.summary,
       path: `/work/${loaderData.slug}`,
+      graph: caseStudyGraph(loaderData),
     });
   },
   component: CaseStudyPage,

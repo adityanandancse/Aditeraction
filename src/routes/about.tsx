@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { site } from "~/lib/site";
+import { aboutGraph } from "~/lib/schema";
 import { Breadcrumbs } from "~/components/layout/Breadcrumbs";
 import { Eyebrow } from "~/components/ui/Eyebrow";
 import { BracketLink } from "~/components/ui/BracketLink";
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/about")({
       title: "About Aditeraction — Founder-led Studio, Noida, India",
       description: aboutDescription,
       path: "/about",
+      graph: aboutGraph(),
     }),
   component: About,
 });
