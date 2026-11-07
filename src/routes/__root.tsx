@@ -61,6 +61,8 @@ export const Route = createRootRoute({
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", href: "/icons/icon-32.png", sizes: "32x32" },
       { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
+      // Points AI clients at the llmstxt.org summary (served from /llms.txt).
+      { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "llms.txt" },
     ],
     // Prod only: inline the entire built stylesheet into a <head> <style>, so
     // the first paint needs no extra CSS request (fixes the ~846ms render-block

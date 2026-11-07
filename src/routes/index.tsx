@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
       description:
         "A founder-led studio that takes you from idea to launched brand, site and app. Design and code under one roof — India and worldwide. Start a project.",
       path: "/",
+      image: "/og/home.png",
+      imageAlt: "Idea to launched.",
       graph: homeGraph(),
     }),
   component: Home,

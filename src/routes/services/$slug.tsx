@@ -27,6 +27,8 @@ export const Route = createFileRoute("/services/$slug")({
       title: loaderData?.seoTitle ?? "Services",
       description: loaderData?.seoDescription ?? site.coreMessage,
       path: loaderData ? `/services/${loaderData.slug}` : "/services",
+      image: loaderData ? `/og/service-${loaderData.slug}.png` : "/og/services.png",
+      imageAlt: loaderData?.title ?? "Services",
       graph: loaderData ? serviceGraph(loaderData) : undefined,
     }),
   component: ServicePage,

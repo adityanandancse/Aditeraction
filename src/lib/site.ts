@@ -223,7 +223,7 @@ export const site = {
       intro:
         "Your brand and your website, designed and built by one team. We draw the identity and write the production code, so what you approve in design is what ships — no handoff, no templates, no drift between mockup and live site.",
       title: "Web & Brand",
-      summary: "Custom-coded websites, designed and built by one team.",
+      summary: "Brand identity and a custom-coded website, designed and built by one team.",
       forWho: "Founders who need a site that looks premium and loads fast — not a template.",
       deliverables: [
         "Logo & brand essentials (mark, colour & type system, brand guide)",
@@ -751,6 +751,24 @@ export const site = {
     formTo: "info@aditeraction.com",
     confirmFrom: "Aditya at Aditeraction <hello@mail.aditeraction.com>", // submitter confirmation
   },
+
+  // Sitemap <lastmod> source (Phase 7b) — manually maintained, one entry per
+  // indexable page. Bump a date when that page's content meaningfully changes.
+  // Paths MUST match the canonical form in seo() (no trailing slash except "/").
+  // Any path missing here is emitted in the sitemap without a <lastmod>. /work
+  // and /work/{slug} are intentionally absent (noindex / unpublished).
+  pagesUpdated: {
+    "/": "2026-11-07",
+    "/services": "2026-11-07",
+    "/services/web-and-brand": "2026-11-07",
+    "/services/product-app-engineering": "2026-11-07",
+    "/services/fashion-d2c": "2026-11-07",
+    "/services/branding-packaging": "2026-11-07",
+    "/services/digital-marketing": "2026-11-07",
+    "/services/video": "2026-11-07",
+    "/about": "2026-11-07",
+    "/contact": "2026-11-07",
+  } satisfies Record<string, string>,
 
   // Primary navigation (header) — per 01-site-architecture.md §4.
   nav: [

@@ -29,6 +29,8 @@ export const Route = createFileRoute("/services/")({
       title: "Services — brand, web, apps, D2C, marketing | Aditeraction",
       description: hubDescription,
       path: "/services",
+      image: "/og/services.png",
+      imageAlt: "Services",
       graph: servicesHubGraph(),
     }),
   component: ServicesHub,

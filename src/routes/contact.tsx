@@ -42,6 +42,8 @@ export const Route = createFileRoute("/contact")({
       description:
         "Email us to start your project. We reply within 24 hours on working days. A founder-led design and engineering studio working with clients worldwide.",
       path: "/contact", // canonical ignores query params
+      image: "/og/contact.png",
+      imageAlt: "Start a project",
       graph: contactGraph(),
     }),
   component: Contact,

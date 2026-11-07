@@ -22,6 +22,8 @@ export const Route = createFileRoute("/about")({
       title: "About Aditeraction — Founder-led Studio, Noida, India",
       description: aboutDescription,
       path: "/about",
+      image: "/og/about.png",
+      imageAlt: "About Aditeraction",
       graph: aboutGraph(),
     }),
   component: About,

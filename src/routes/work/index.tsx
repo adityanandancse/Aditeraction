@@ -21,6 +21,8 @@ export const Route = createFileRoute("/work/")({
       title: "Work — Brand, Web & App Projects | Aditeraction",
       description: `Brand, website and app projects for founders across ${industriesText}. India, UK, USA, UAE and worldwide.`,
       path: "/work",
+      image: "/og/work.png",
+      imageAlt: "Work",
       graph: workHubGraph(),
     });
     // Thin page while no case studies are published: keep it out of the index but
