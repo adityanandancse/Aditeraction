@@ -12,7 +12,7 @@ export function HomeProcess() {
     <section
       id="how-it-works"
       aria-labelledby="how-it-works-title"
-      className="border-t border-line bg-ink"
+      className="cv-auto [--cv-h:800px] border-t border-line bg-ink"
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>{process.eyebrow}</Eyebrow>

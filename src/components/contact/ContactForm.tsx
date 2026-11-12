@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { site } from "~/lib/site";
 import { submitEnquiry, type EnquiryResult } from "~/lib/contact-server";
@@ -222,7 +223,11 @@ export function ContactForm({
           {status === "submitting" ? "Sending…" : "Send enquiry"}
         </button>
         <p className="mt-3 text-xs text-graphite">
-          We&apos;ll only use your details to reply to this enquiry.
+          We use your details only to reply. See our{" "}
+          <Link to="/privacy" className="text-paper underline underline-offset-2 transition-colors hover:text-vermilion">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </div>
     </form>

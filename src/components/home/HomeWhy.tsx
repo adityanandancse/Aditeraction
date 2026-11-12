@@ -11,7 +11,7 @@ export function HomeWhy() {
     <section
       id="why"
       aria-labelledby="why-title"
-      className="border-t border-line bg-ink"
+      className="cv-auto [--cv-h:1100px] border-t border-line bg-ink"
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>{why.eyebrow}</Eyebrow>

@@ -21,8 +21,15 @@ export function IntroLoader() {
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    // Respect the CSS gate: if it's not actually visible, do nothing (no lock).
-    if (getComputedStyle(el).display === "none") return;
+    // Respect the CSS gate WITHOUT reading computed style (getComputedStyle forces
+    // a style/layout flush during hydration). The intro shows iff JS is active and
+    // it hasn't been seen this session and reduced motion is off — mirror that gate
+    // from the class flags + media query the CSS itself uses (see app.css #adx-intro).
+    const docEl = document.documentElement;
+    const hidden =
+      docEl.classList.contains("intro-seen") ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (hidden) return;
 
     const t0 = performance.now();
     let ready = false;

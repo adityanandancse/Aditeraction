@@ -3,7 +3,7 @@
 // site.ts. Rules: single source = site.ts; absolute URLs from site.url; never
 // list a URL that is noindex or 404.
 //
-// Included: / , /services, the 6 /services/{slug}, /about, /contact. /work and
+// Included: / , /services, the 6 /services/{slug}, /about, /contact, /privacy. /work and
 // every /work/{slug} are OMITTED while /work is noindex and all case studies are
 // unpublished (getPublishedWork() is empty); published studies re-add themselves
 // automatically via the loop below. <lastmod> comes from site.pagesUpdated (never
@@ -33,6 +33,7 @@ export function sitemapPaths(): string[] {
     ...site.services.map((s) => `/services/${s.slug}`),
     "/about",
     "/contact",
+    "/privacy",
   ];
 
   // /work is noindex until a case study is published; include it and the

@@ -272,6 +272,14 @@ export function contactGraph(): Node[] {
   ];
 }
 
+export function privacyGraph(): Node[] {
+  const u = pageUrl("/privacy");
+  return [
+    webPageNode(u, "WebPage", { name: "Privacy Policy" }),
+    breadcrumbNode(u, [{ name: "Home", url: pageUrl("/") }, { name: "Privacy Policy" }]),
+  ];
+}
+
 // ------------------------------------------------------------- serialisation --
 /** Recursively drop undefined/null so no empty fields reach the output. */
 export function cleanDeep<T>(value: T): T {

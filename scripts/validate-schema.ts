@@ -19,6 +19,7 @@ import {
   caseStudyGraph,
   aboutGraph,
   contactGraph,
+  privacyGraph,
 } from "~/lib/schema";
 
 type Node = Record<string, any>;
@@ -47,6 +48,7 @@ const pages: Page[] = [
   { key: "/work", nodes: workHubGraph(), crumbs: ["Home", "Work"] },
   { key: "/about", nodes: aboutGraph(), crumbs: ["Home", "About"] },
   { key: "/contact", nodes: contactGraph(), crumbs: ["Home", "Contact"] },
+  { key: "/privacy", nodes: privacyGraph(), crumbs: ["Home", "Privacy Policy"] },
 ];
 
 // Synthetic case study — no real published studies exist yet; this only exercises

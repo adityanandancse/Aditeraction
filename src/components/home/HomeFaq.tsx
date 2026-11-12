@@ -7,7 +7,7 @@ import { FaqList } from "~/components/shared/FaqList";
 // site.faqs; only the eyebrow and H2 are headings.
 export function HomeFaq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="border-t border-line bg-ink">
+    <section id="faq" aria-labelledby="faq-title" className="cv-auto [--cv-h:1200px] border-t border-line bg-ink">
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>FAQ</Eyebrow>
         <h2 id="faq-title" className="mt-5 font-display text-3xl text-paper sm:text-4xl">

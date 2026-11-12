@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { homeGraph } from "~/lib/schema";
@@ -43,19 +44,43 @@ function Home() {
           glance" stats section (HomeStats) is hidden until real figures exist
           (Phase 5c); HomeReach now fills this slot. */}
       <HomePillars />
-      <HomeProcess />
-      <HomeReach />
+
+      {/* Each below-fold section is its own <Suspense> boundary so React (with
+          startTransition hydration, see src/client.tsx) hydrates them as separate,
+          yieldable units instead of one long main-thread task. SSR output is
+          unchanged — children are already resolved, so no fallback ever shows.
+          The hero and the Brand/Site/App panels are left un-wrapped. */}
+      <Suspense fallback={null}>
+        <HomeProcess />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeReach />
+      </Suspense>
 
       {/* Phase 4b/4c — services → plans → why → stack → selected work → contact.
           These replace the earlier simple "What we do" grid; the footer
           (section 8) lives in the root layout. */}
-      <HomeServices />
-      <HomePlans />
-      <HomeWhy />
-      <HomeStack />
-      <HomeWork />
-      <HomeFaq />
-      <HomeContact />
+      <Suspense fallback={null}>
+        <HomeServices />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomePlans />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeWhy />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeStack />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeWork />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeFaq />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeContact />
+      </Suspense>
     </>
   );
 }

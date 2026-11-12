@@ -14,7 +14,7 @@ export function HomeServices() {
     <section
       id="services"
       aria-labelledby="services-title"
-      className="border-t border-line bg-ink"
+      className="cv-auto [--cv-h:3400px] border-t border-line bg-ink"
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>{servicesSection.eyebrow}</Eyebrow>

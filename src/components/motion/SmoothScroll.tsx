@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useRouter } from "@tanstack/react-router";
 import type LenisType from "lenis";
+import { onLoadIdle } from "~/lib/idle";
 
 // Phase 3 consumers read the live Lenis instance (or null under reduced motion
 // / no-JS) via useLenis().
@@ -29,8 +30,9 @@ function headerOffset(): number {
  * - The dynamic import is deferred to requestIdleCallback so Lenis module eval
  *   never lands in the hydration long task. Anchor/popstate listeners attach
  *   synchronously so navigation works immediately even before Lenis is ready.
- * - prefers-reduced-motion: reduce → Lenis is NOT initialised (native scroll);
- *   changes to the preference are listened for and re-applied live.
+ * - Lenis loads/starts ONLY on a fine-pointer, hover-capable device (desktop) with
+ *   reduced motion off. Touch/coarse-pointer devices and reduced-motion users never
+ *   download or run it — native scroll is used. Preference changes re-apply live.
  * - Route changes jump to top; #hash targets scroll with a header offset;
  *   back/forward restores the saved position. All teardown on unmount/HMR.
  */
@@ -63,12 +65,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     const scrollToHash = (hash: string) => {
       const el = document.getElementById(hash.replace(/^#/, ""));
       if (!el) return;
-      const offset = -headerOffset() - 8;
       if (instance) {
-        instance.scrollTo(el, { offset });
+        instance.scrollTo(el, { offset: -headerOffset() - 8 });
       } else {
-        const top = el.getBoundingClientRect().top + window.scrollY + offset;
-        window.scrollTo({ top });
+        // No Lenis (touch / reduced motion / not yet started): native scroll.
+        // scroll-margin-top keeps the target clear of the sticky header.
+        el.style.scrollMarginTop = `${headerOffset() + 8}px`;
+        el.scrollIntoView({ behavior: mq.matches ? "auto" : "smooth", block: "start" });
       }
     };
 
@@ -119,8 +122,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
 
     async function setup() {
-      if (mq.matches) {
-        // Reduced motion: native scroll, no Lenis.
+      // Only desktop-class input (hover + fine pointer) with motion allowed gets
+      // Lenis. Touch/coarse devices and reduced-motion users use native scroll and
+      // never download the chunk (the dynamic import lives in the else branch).
+      const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      if (mq.matches || !canHover) {
         instance = null;
         window.addEventListener("scroll", onScroll, { passive: true });
       } else {
@@ -152,18 +158,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
     attachShared();
 
-    // Defer Lenis init off the hydration critical path — its module eval then
-    // runs during an idle slice instead of the first post-hydration frame.
-    const w = window as unknown as {
-      requestIdleCallback?: (cb: () => void, o?: { timeout?: number }) => number;
-      cancelIdleCallback?: (h: number) => void;
-    };
-    let idleHandle: number | undefined;
-    if (w.requestIdleCallback) {
-      idleHandle = w.requestIdleCallback(() => void setup(), { timeout: 1500 });
-    } else {
-      idleHandle = window.setTimeout(() => void setup(), 1);
-    }
+    // Defer Lenis init to load + idle — native scroll works immediately (anchor
+    // and popstate listeners attached above), and Lenis's module eval + init land
+    // in an idle slice instead of the hydration long task. Attaching does not move
+    // the scroll position, so there is no jump when it takes over.
+    const cancelIdle = onLoadIdle(() => void setup());
 
     const unsubscribe = router.subscribe("onResolved", ({ toLocation }) => {
       handleNav(toLocation as { hash?: string; href: string; state?: unknown });
@@ -174,10 +173,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       unsubscribe();
       mq.removeEventListener("change", onPreferenceChange);
       detachShared();
-      if (idleHandle !== undefined) {
-        if (w.requestIdleCallback && w.cancelIdleCallback) w.cancelIdleCallback(idleHandle);
-        else clearTimeout(idleHandle);
-      }
+      cancelIdle();
       window.removeEventListener("scroll", onScroll);
       instance?.destroy();
       try {

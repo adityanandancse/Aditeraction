@@ -1,4 +1,5 @@
-// Hero debug instrumentation. Zero cost unless the URL carries ?herodebug:
+// Hero debug instrumentation. Dev only: ENABLED requires import.meta.env.DEV, so
+// ?herodebug does nothing in a production build. Zero cost unless enabled:
 // ENABLED is computed once; every setter early-returns when off and nothing
 // subscribes, so the overlay never mounts and the per-frame writes are skipped.
 export interface HeroDebugState {
@@ -31,6 +32,7 @@ export interface HeroDebugState {
 }
 
 const ENABLED =
+  import.meta.env.DEV &&
   typeof window !== "undefined" &&
   new URLSearchParams(window.location.search).has("herodebug");
 

@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { buildParticles } from "./buildParticles";
 import { heroDebugEnabled, heroGate, heroStat } from "./heroDebug";
 import { composeModel, lookAt, multiply, perspective } from "./mat4";
+import { yieldToMain } from "~/lib/idle";
 
 const STAGE = ["01 / 03", "02 / 03", "03 / 03", "—"];
 
@@ -150,6 +151,7 @@ export default function HeroCanvas({
     let N = 0;
     let programLinked = false;
     let buffersReady = false;
+    let uploading = false;
     let compiled = false;
     const uloc: Record<string, WebGLUniformLocation | null> = {};
 
@@ -395,8 +397,12 @@ export default function HeroCanvas({
       }
     };
 
-    const uploadBuffers = () => {
-      if (!program || !attrs) return;
+    // The worker already posts ready-to-upload, transferred Float32Arrays, so the
+    // main thread only does gl.bufferData + attribute wiring. Upload one buffer per
+    // slice and yield between them, so this never coalesces into a long task.
+    const uploadBuffers = async () => {
+      if (!program || !attrs || uploading || buffersReady) return;
+      uploading = true;
       const defs: Array<[name: string, data: Float32Array, size: number]> = [
         ["position", attrs.position, 3],
         ["aB", attrs.aB, 3],
@@ -404,27 +410,44 @@ export default function HeroCanvas({
         ["aD", attrs.aD, 1],
         ["aR", attrs.aR, 1],
       ];
-      for (const [name, data, size] of defs) {
+      for (let k = 0; k < defs.length; k++) {
+        // Context loss (or unmount) clears program/buffers — bail and release the
+        // flag so a later rebuild can re-upload.
+        if (disposed || !program) {
+          uploading = false;
+          return;
+        }
+        const [name, data, size] = defs[k]!;
         const loc = ctx.getAttribLocation(program, name);
-        if (loc < 0) continue;
-        const buf = ctx.createBuffer();
-        if (!buf) continue;
-        ctx.bindBuffer(ctx.ARRAY_BUFFER, buf);
-        ctx.bufferData(ctx.ARRAY_BUFFER, data, ctx.STATIC_DRAW);
-        ctx.enableVertexAttribArray(loc);
-        ctx.vertexAttribPointer(loc, size, ctx.FLOAT, false, 0, 0);
-        buffers.push(buf);
+        if (loc >= 0) {
+          const buf = ctx.createBuffer();
+          if (buf) {
+            ctx.bindBuffer(ctx.ARRAY_BUFFER, buf);
+            ctx.bufferData(ctx.ARRAY_BUFFER, data, ctx.STATIC_DRAW);
+            ctx.enableVertexAttribArray(loc);
+            ctx.vertexAttribPointer(loc, size, ctx.FLOAT, false, 0, 0);
+            buffers.push(buf);
+          }
+        }
+        if (k < defs.length - 1) await yieldToMain();
       }
+      uploading = false;
+      if (disposed || !program) return;
       buffersReady = true;
+      finalizeCompiled();
     };
 
-    const maybeFinish = () => {
-      if (programLinked && attrs && !buffersReady) uploadBuffers();
+    const finalizeCompiled = () => {
       if (programLinked && buffersReady && !compiled) {
         compiled = true;
         heroGate("compiled", true);
         sync();
       }
+    };
+
+    const maybeFinish = () => {
+      if (programLinked && attrs && !buffersReady) void uploadBuffers();
+      else finalizeCompiled();
     };
 
     // --- pointer (passive), visibility, intersection -----------------------
@@ -464,6 +487,7 @@ export default function HeroCanvas({
       compiled = false;
       programLinked = false;
       buffersReady = false;
+      uploading = false;
       program = null;
       buffers.length = 0;
       readyFired = false;

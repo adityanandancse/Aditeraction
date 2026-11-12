@@ -1,6 +1,16 @@
-// One shared IntersectionObserver for every <Reveal>. Animates opacity +
-// transform once, with a small document-order stagger per batch. Includes a
-// safety net: if the observer never fires, everything is revealed after 2s.
+// One shared IntersectionObserver for every <Reveal>.
+//
+// Created immediately on mount (on the first registration). An IntersectionObserver
+// is cheap to construct and its first callback is delivered ASYNCHRONOUSLY with
+// pre-computed intersection data — so it reports which elements are in view WITHOUT
+// any synchronous getBoundingClientRect / innerHeight read. That removes the forced
+// reflow the previous rAF measure-pass caused during hydration. Elements already in
+// the viewport are revealed by that first callback; the rest reveal on scroll.
+//
+// Invariants kept: the hidden start state is CSS-gated on `.js` + no-preference, so
+// no-JS and reduced-motion users see everything; the hero H1 (LCP) is never a
+// <Reveal>, so it never waits on this; a 2s safety net guarantees eventual reveal;
+// the observer is a module singleton, so client navigation never re-inits it.
 
 let io: IntersectionObserver | null = null;
 let safetyArmed = false;
@@ -32,10 +42,12 @@ function armSafetyNet() {
 }
 
 function ensureObserver(): IntersectionObserver | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return null;
   if (io) return io;
   io = new IntersectionObserver(
     (entries) => {
+      // boundingClientRect/isIntersecting here are supplied by the observer (no
+      // forced layout). Sort the batch by document order for a natural stagger.
       const shown = entries
         .filter((e) => e.isIntersecting)
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -50,15 +62,11 @@ function ensureObserver(): IntersectionObserver | null {
   return io;
 }
 
-// Observing happens off the hydration critical path: elements queue here and are
-// attached during an idle slice. Below-the-fold reveals aren't visible yet, so a
-// small delay is invisible; the 2s safety net still guarantees they appear.
-const pending: HTMLElement[] = [];
-let flushScheduled = false;
-
-function attach(el: HTMLElement) {
-  // Reduced motion (or no observer support): reveal immediately, no transform.
-  // (Under reduced motion the hidden CSS never applies, so this is a no-op paint.)
+export function observeReveal(el: HTMLElement) {
+  if (typeof window === "undefined") return;
+  armSafetyNet();
+  // Reduced motion (or no IntersectionObserver): reveal immediately — the hidden
+  // CSS is gated on no-preference, so this is a no-op paint under reduced motion.
   if (reduceMotion()) {
     el.dataset.revealed = "true";
     return;
@@ -69,23 +77,4 @@ function attach(el: HTMLElement) {
     return;
   }
   observer.observe(el);
-}
-
-function flush() {
-  flushScheduled = false;
-  const batch = pending.splice(0, pending.length);
-  for (const el of batch) attach(el);
-}
-
-export function observeReveal(el: HTMLElement) {
-  if (typeof window === "undefined") return;
-  armSafetyNet();
-  pending.push(el);
-  if (flushScheduled) return;
-  flushScheduled = true;
-  const w = window as unknown as {
-    requestIdleCallback?: (cb: () => void, o?: { timeout?: number }) => number;
-  };
-  if (w.requestIdleCallback) w.requestIdleCallback(flush, { timeout: 500 });
-  else window.setTimeout(flush, 1);
 }

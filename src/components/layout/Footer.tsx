@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { site } from "~/lib/site";
+import { site, visibleNav } from "~/lib/site";
 import { Reveal } from "~/components/motion/Reveal";
 import { LogoHorizontal } from "./Logo";
 
@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="adx-cv-footer border-t border-line bg-ink">
+    <footer className="cv-auto [--cv-h:800px] border-t border-line bg-ink">
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           {/* Brand block */}
@@ -46,7 +46,7 @@ export function Footer() {
             <Reveal>
               <p className={colTitle}>Studio</p>
               <ul className="mt-4 flex flex-col gap-2.5">
-                {site.footer.studio.map((n) => (
+                {visibleNav(site.footer.studio).map((n) => (
                   <li key={n.to}>
                     <Link to={n.to} className={colLink}>
                       {n.label}
@@ -76,13 +76,15 @@ export function Footer() {
               </ul>
             </Reveal>
 
-            {/* Legal column — placeholders (pages not in Phase 1 scope; no broken links) */}
+            {/* Legal column */}
             <Reveal>
               <p className={colTitle}>Legal</p>
               <ul className="mt-4 flex flex-col gap-2.5">
-                {site.footer.legal.map((label) => (
-                  <li key={label} className="text-sm text-graphite/60">
-                    {label}
+                {site.footer.legal.map((n) => (
+                  <li key={n.to}>
+                    <Link to={n.to} className={colLink}>
+                      {n.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

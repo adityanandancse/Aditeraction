@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { site } from "~/lib/site";
+import { site, visibleNav } from "~/lib/site";
 import { LogoHorizontal } from "./Logo";
 import { ButtonLink } from "../ui/Button";
+
+// Top-level links beside the Services dropdown (Work hidden until published).
+const navItems = visibleNav(site.nav).filter((n) => n.to !== "/services");
 
 const navLink =
   "font-mono text-xs uppercase tracking-[0.12em] text-paper/80 transition-colors hover:text-paper";
@@ -93,15 +96,13 @@ export function Header() {
               </ul>
             </li>
 
-            {site.nav
-              .filter((n) => n.to !== "/services")
-              .map((n) => (
-                <li key={n.to}>
-                  <Link to={n.to} className={navLink}>
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
+            {navItems.map((n) => (
+              <li key={n.to}>
+                <Link to={n.to} className={navLink}>
+                  {n.label}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           <ButtonLink to={site.cta.to} variant="primary">
@@ -144,15 +145,13 @@ export function Header() {
             ))}
           </ul>
           <ul className="flex flex-col gap-3 border-t border-line pt-5">
-            {site.nav
-              .filter((n) => n.to !== "/services")
-              .map((n) => (
-                <li key={n.to}>
-                  <Link to={n.to} onClick={() => setMobileOpen(false)} className={navLink}>
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
+            {navItems.map((n) => (
+              <li key={n.to}>
+                <Link to={n.to} onClick={() => setMobileOpen(false)} className={navLink}>
+                  {n.label}
+                </Link>
+              </li>
+            ))}
           </ul>
           <div className="mt-6">
             <ButtonLink to={site.cta.to} variant="primary" className="w-full">

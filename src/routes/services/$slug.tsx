@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { getService, site } from "~/lib/site";
@@ -75,7 +76,8 @@ function ServicePage() {
       </section>
 
       {/* How it works */}
-      <section aria-labelledby="process-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="process-title" className="cv-auto [--cv-h:700px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="process-title" className="font-display text-2xl text-paper sm:text-3xl">
             How it works
@@ -100,9 +102,11 @@ function ServicePage() {
           </ol>
         </div>
       </section>
+      </Suspense>
 
       {/* Timeline & pricing */}
-      <section aria-labelledby="timeline-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="timeline-title" className="cv-auto [--cv-h:400px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="timeline-title" className="font-display text-2xl text-paper sm:text-3xl">
             Timeline &amp; pricing
@@ -122,9 +126,11 @@ function ServicePage() {
           </div>
         </div>
       </section>
+      </Suspense>
 
       {/* Included in */}
-      <section aria-labelledby="included-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="included-title" className="cv-auto [--cv-h:300px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="included-title" className="font-display text-2xl text-paper sm:text-3xl">
             Included in
@@ -143,9 +149,11 @@ function ServicePage() {
           </p>
         </div>
       </section>
+      </Suspense>
 
       {/* Questions */}
-      <section aria-labelledby="service-faq-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="service-faq-title" className="cv-auto [--cv-h:500px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <Eyebrow>FAQ</Eyebrow>
           <h2 id="service-faq-title" className="mt-5 font-display text-2xl text-paper sm:text-3xl">
@@ -154,9 +162,11 @@ function ServicePage() {
           <FaqList items={service.faqs} idPrefix={`faq-${service.slug}`} />
         </div>
       </section>
+      </Suspense>
 
       {/* Related services */}
-      <section aria-labelledby="related-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="related-title" className="cv-auto [--cv-h:300px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="related-title" className="font-display text-2xl text-paper sm:text-3xl">
             Related services
@@ -170,8 +180,11 @@ function ServicePage() {
           </div>
         </div>
       </section>
+      </Suspense>
 
-      <HomeContact />
+      <Suspense fallback={null}>
+        <HomeContact />
+      </Suspense>
     </>
   );
 }

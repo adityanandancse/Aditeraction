@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { site, pickFaqs } from "~/lib/site";
@@ -187,7 +187,8 @@ function Contact() {
       </section>
 
       {/* Questions */}
-      <section aria-labelledby="contact-faq-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="contact-faq-title" className="cv-auto [--cv-h:500px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <Eyebrow>FAQ</Eyebrow>
           <h2 id="contact-faq-title" className="mt-5 font-display text-3xl text-paper sm:text-4xl">
@@ -196,6 +197,7 @@ function Contact() {
           <FaqList items={contactFaqs} idPrefix="contact-faq" />
         </div>
       </section>
+      </Suspense>
     </>
   );
 }

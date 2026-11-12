@@ -41,7 +41,7 @@ export function HomeReach() {
     <section
       id="reach"
       aria-labelledby="reach-title"
-      className="border-t border-line bg-ink"
+      className="cv-auto [--cv-h:700px] border-t border-line bg-ink"
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>{reach.eyebrow}</Eyebrow>

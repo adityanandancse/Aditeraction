@@ -13,7 +13,7 @@ export function HomeStack() {
     <section
       id="stack"
       aria-labelledby="stack-title"
-      className="border-t border-line bg-ink"
+      className="cv-auto [--cv-h:1400px] border-t border-line bg-ink"
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
         <Eyebrow>{stack.eyebrow}</Eyebrow>

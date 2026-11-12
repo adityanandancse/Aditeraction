@@ -3,7 +3,10 @@
   "name": "aditeraction",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry",
+  // Custom server entry (security headers + www→apex redirect). The package
+  // path "@tanstack/react-start/server-entry" always loads Start's built-in
+  // entry and bypasses src/server.ts, so main points at the file directly.
+  "main": "src/server.ts",
   "observability": {
     "enabled": true
   }

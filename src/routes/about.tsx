@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "~/lib/seo";
 import { site } from "~/lib/site";
@@ -61,7 +62,8 @@ function About() {
       </section>
 
       {/* How we work — single-source from site.howWeWork (all from facts) */}
-      <section aria-labelledby="howwework-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="howwework-title" className="cv-auto [--cv-h:1000px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="howwework-title" className="font-display text-2xl text-paper sm:text-3xl">
             How we work
@@ -78,13 +80,19 @@ function About() {
           </dl>
         </div>
       </section>
+      </Suspense>
 
       {/* Reused home sections — unique heading ids (#why, #reach) on this page */}
-      <HomeWhy />
-      <HomeReach />
+      <Suspense fallback={null}>
+        <HomeWhy />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeReach />
+      </Suspense>
 
       {/* Industries + routes into services */}
-      <section aria-labelledby="industries-title" className="border-t border-line bg-ink">
+      <Suspense fallback={null}>
+      <section aria-labelledby="industries-title" className="cv-auto [--cv-h:400px] border-t border-line bg-ink">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 id="industries-title" className="font-display text-2xl text-paper sm:text-3xl">
             Who we work with
@@ -104,8 +112,11 @@ function About() {
           </div>
         </div>
       </section>
+      </Suspense>
 
-      <HomeContact />
+      <Suspense fallback={null}>
+        <HomeContact />
+      </Suspense>
     </>
   );
 }

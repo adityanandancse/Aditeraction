@@ -21,3 +21,12 @@ src/routeTree.gen.ts
 *.local
 
 .dev.vars
+.DEV.VARS
+
+# npm lockfile (bun.lock is the lockfile)
+package-lock.json
+
+# local-only working folders
+branding-pdfs/
+tools/
+.claude/settings.local.json

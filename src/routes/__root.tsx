@@ -4,7 +4,7 @@ import {
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 // Dev: load the stylesheet as a file so Vite HMR applies CSS edits live.
 // Prod: inline the compiled sheet (below) so first paint needs no extra CSS
 // request — the whole file is small (~7.7KB brotli) and was flagged as the only
@@ -92,10 +92,25 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/* Skip link — first element in <body>; hidden until keyboard focus.
+            The onClick moves focus explicitly because SmoothScroll intercepts
+            in-page #hash clicks (it scrolls, but would not move focus). */}
+        <a
+          href="#main"
+          onClick={() => document.getElementById("main")?.focus()}
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-vermilion focus:px-4 focus:py-3 focus:font-mono focus:text-xs focus:uppercase focus:tracking-[0.12em] focus:text-ink"
+        >
+          Skip to content
+        </a>
         <SmoothScroll>
           <Header />
-          <main id="main">{children}</main>
-          <Footer />
+          <main id="main" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
+          {/* Below-fold on every route → its own hydration unit. */}
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
         </SmoothScroll>
         <Scripts />
       </body>

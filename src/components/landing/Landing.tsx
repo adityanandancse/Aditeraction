@@ -12,12 +12,18 @@ import {
 // Paper on the Ink hero (the nib stays Vermilion). The small status-log mark is the
 // same markup inlined — it must be inline, not an <img>, for currentColor to resolve.
 import markRaw from "~/assets/brand/mark.svg?raw";
+import { onLoadIdle } from "~/lib/idle";
 import { heroGate } from "./heroDebug";
-import { HeroDebugOverlay } from "./HeroDebugOverlay";
 
 // Raw-WebGL hero lives ONLY inside this lazy chunk (no SSR / entry weight, zero
 // runtime deps).
 const HeroCanvas = lazy(() => import("./HeroCanvas"));
+
+// ?herodebug overlay — dev only. import.meta.env.DEV is statically false in a
+// production build, so the dynamic import (and the overlay chunk) is dropped.
+const HeroDebugOverlay = import.meta.env.DEV
+  ? lazy(() => import("./HeroDebugOverlay").then((m) => ({ default: m.HeroDebugOverlay })))
+  : null;
 
 function hasWebGL(): boolean {
   try {
@@ -78,14 +84,12 @@ export function Landing() {
       fireReady(); // fallback decided — release the intro loader
       return;
     }
-    const w = window as unknown as {
-      requestIdleCallback?: (cb: () => void, o?: { timeout?: number }) => number;
-      cancelIdleCallback?: (h: number) => void;
-    };
-    // Mount only after the page has fully loaded, then on the first idle slice
-    // (hard cap 2s). Never on hydration — keeps the WebGL chunk off the critical path.
-    // 'load' may have already fired before this effect ran → check readyState.
+    // Mount only after the page has loaded, then on the first idle slice — never
+    // on hydration. onLoadIdle gates the whole HeroCanvas mount, so the WebGL
+    // chunk, the worker spawn AND its first message all stay off the critical
+    // path. It runs immediately if 'load' already fired.
     const start = () => {
+      heroGate("loadFired", true);
       heroGate("idleFired", true);
       const webgl = hasWebGL();
       heroGate("webglSupported", webgl);
@@ -95,21 +99,7 @@ export function Landing() {
       }
       setMount(true);
     };
-    let handle: number | undefined;
-    const schedule = () => {
-      heroGate("loadFired", true);
-      if (w.requestIdleCallback) handle = w.requestIdleCallback(start, { timeout: 2000 });
-      else handle = window.setTimeout(start, 200);
-    };
-    const onLoad = () => schedule();
-    if (document.readyState === "complete") schedule();
-    else window.addEventListener("load", onLoad, { once: true });
-    return () => {
-      window.removeEventListener("load", onLoad);
-      if (handle === undefined) return;
-      if (w.requestIdleCallback && w.cancelIdleCallback) w.cancelIdleCallback(handle);
-      else clearTimeout(handle);
-    };
+    return onLoadIdle(start);
   }, []);
 
   const handleReady = () => {
@@ -128,7 +118,11 @@ export function Landing() {
       data-canvas={ready ? "ready" : "idle"}
       className="relative h-[2800px]"
     >
-      <HeroDebugOverlay />
+      {HeroDebugOverlay && (
+        <Suspense fallback={null}>
+          <HeroDebugOverlay />
+        </Suspense>
+      )}
       <div className="adx-contain sticky top-0 h-[min(100svh,960px)] overflow-hidden bg-ink">
         {/* (a) static fallback — real brand symbol, SSR, decorative. Inline <svg>
             (not <img>) so it is never chosen as the LCP element. */}

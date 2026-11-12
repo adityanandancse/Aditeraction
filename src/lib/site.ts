@@ -38,14 +38,14 @@ export interface ServiceDef {
   forWho: string; // one-line "who it's for"
   deliverables: readonly string[];
   process: readonly string[]; // Call / Build / Launch wording for this service
-  timeline: string; // TODO(AB) — real timeline once confirmed
-  pricing: string; // TODO(AB) — real pricing once confirmed
-  faqs: readonly Faq[]; // TODO(AB) — empty until written
+  timeline: string;
+  pricing: string;
+  faqs: readonly Faq[];
   plans: readonly string[]; // plan ids (site.plans) whose scope includes this service
 }
 
 // Static routes used in nav/footer (keeps TanStack's typed `to` happy).
-export type AppPath = "/" | "/services" | "/work" | "/about" | "/contact";
+export type AppPath = "/" | "/services" | "/work" | "/about" | "/contact" | "/privacy";
 
 export interface NavItem {
   label: string;
@@ -768,6 +768,7 @@ export const site = {
     "/services/video": "2026-11-07",
     "/about": "2026-11-07",
     "/contact": "2026-11-07",
+    "/privacy": "2026-11-12",
   } satisfies Record<string, string>,
 
   // Primary navigation (header) — per 01-site-architecture.md §4.
@@ -787,9 +788,7 @@ export const site = {
       { label: "About", to: "/about" },
       { label: "Contact", to: "/contact" },
     ] satisfies NavItem[],
-    // Legal pages are flagged in 01 §8 — not part of the Phase 1 route scope,
-    // so rendered as non-linked placeholders (no broken internal links).
-    legal: ["Privacy", "Terms"],
+    legal: [{ label: "Privacy", to: "/privacy" }] satisfies NavItem[],
   },
 
   // Social profiles — confirmed accounts. Footer renders these as text links with
@@ -811,6 +810,16 @@ export function getService(slug: string): ServiceDef | undefined {
 /** Published case studies only — placeholders (published: false) are excluded. */
 export function getPublishedWork(): readonly CaseStudy[] {
   return site.work.filter((w) => w.published);
+}
+
+/**
+ * Nav items safe to render: drops the /work link while no case study is
+ * published, so header, footer and 404 never point at an empty page. Setting
+ * one study to `published: true` brings every Work link back.
+ */
+export function visibleNav<T extends { to: string }>(items: readonly T[]): T[] {
+  const hasWork = getPublishedWork().length > 0;
+  return items.filter((n) => n.to !== "/work" || hasWork);
 }
 
 /** Resolve a published case study by slug; undefined for unknown/unpublished. */
