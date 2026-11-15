@@ -8,7 +8,10 @@
 // unpublished (getPublishedWork() is empty); published studies re-add themselves
 // automatically via the loop below. <lastmod> comes from site.pagesUpdated (never
 // build time) and is omitted for any path not in that map. No changefreq/priority.
+// /blog and every post are added once a post exists; a post's <lastmod> is its
+// `updated` (or `date`) frontmatter, and /blog takes the newest of those.
 import { site, getPublishedWork } from "./site";
+import { getPosts } from "./blog";
 
 /** Absolute URL for a route path. Home keeps its single trailing slash. */
 function loc(path: string): string {
@@ -43,12 +46,22 @@ export function sitemapPaths(): string[] {
     paths.push("/work", ...published.map((w) => `/work/${w.slug}`));
   }
 
+  const posts = getPosts();
+  if (posts.length > 0) {
+    paths.push("/blog", ...posts.map((p) => `/blog/${p.slug}`));
+  }
+
   return paths;
 }
 
 /** Full <urlset> document as a string, ready to serve as application/xml. */
 export function buildSitemap(): string {
-  const lastmod = site.pagesUpdated as Record<string, string>;
+  const lastmod: Record<string, string> = { ...site.pagesUpdated };
+  const posts = getPosts();
+  for (const p of posts) lastmod[`/blog/${p.slug}`] = p.updated ?? p.date;
+  if (posts.length > 0) {
+    lastmod["/blog"] = posts.map((p) => p.updated ?? p.date).sort().at(-1) as string;
+  }
 
   const urls = sitemapPaths()
     .map((path) => {

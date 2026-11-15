@@ -3,6 +3,7 @@
 // stays in sync with site.ts. Format: llmstxt.org (Markdown). Facts only; every
 // string is sourced from site.ts, nothing invented (no numbers, clients, dates).
 import { site } from "./site";
+import { getPosts } from "./blog";
 
 const abs = (path: string): string => `${site.url}${path}`;
 
@@ -59,6 +60,14 @@ export function buildLlmsTxt(): string {
     `- [Contact](${abs("/contact")}): Email ${site.email}. ${howWeWork("Communication")}`,
   ].join("\n");
 
+  const posts = getPosts();
+  const blog =
+    posts.length > 0
+      ? `\n## Blog\n\n${posts
+          .map((p) => `- [${p.title}](${abs(`/blog/${p.slug}`)}): ${p.description}`)
+          .join("\n")}\n`
+      : "";
+
   return `${header()}
 
 ## Services
@@ -75,7 +84,7 @@ ${careLine}
 ## Company
 
 ${company}
-
+${blog}
 ## Optional
 
 - [Full FAQ](${abs("/llms-full.txt")}): Every question and answer, site-wide and per service.

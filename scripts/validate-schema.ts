@@ -17,6 +17,8 @@ import {
   serviceGraph,
   workHubGraph,
   caseStudyGraph,
+  blogHubGraph,
+  blogPostGraph,
   aboutGraph,
   contactGraph,
   privacyGraph,
@@ -70,6 +72,25 @@ pages.push({
   note: "synthetic — no published case studies exist yet",
 });
 
+// Synthetic blog post — real posts live in content/blog and are only readable
+// inside Vite (import.meta.glob), so this exercises the builders structurally.
+const samplePost = {
+  slug: "sample-post",
+  title: "Sample Post",
+  description: "A synthetic post used only to validate the BlogPosting schema builder.",
+  date: "2026-01-15",
+  tags: ["Sample"],
+};
+pages.push(
+  { key: "/blog", nodes: blogHubGraph([samplePost]), crumbs: ["Home", "Blog"], note: "synthetic post list" },
+  {
+    key: "/blog/sample-post",
+    nodes: blogPostGraph(samplePost),
+    crumbs: ["Home", "Blog", "Sample Post"],
+    note: "synthetic",
+  },
+);
+
 function typesOf(n: Node): string[] {
   const t = n["@type"];
   return Array.isArray(t) ? t : t ? [t] : [];
@@ -103,6 +124,7 @@ const REQUIRED: Record<string, string[]> = {
   ContactPage: ["@id", "url"],
   Service: ["name", "provider", "@id"],
   CreativeWork: ["name", "description"],
+  BlogPosting: ["headline", "description", "datePublished", "dateModified", "author", "publisher", "image"],
 };
 
 let failures = 0;

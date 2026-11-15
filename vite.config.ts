@@ -3,6 +3,7 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import { blogPlugin } from "./scripts/blog-plugin";
 
 // Cloudflare plugin must come first; React's plugin must come after Start's.
 // (Per the official TanStack Start Cloudflare hosting guide.)
@@ -20,6 +21,7 @@ export default defineConfig({
   plugins: [
     cloudflare({ viteEnvironment: { name: "ssr" } }),
     tailwindcss(),
+    blogPlugin(), // content/blog/*.md → post modules (see src/lib/blog.ts)
     tanstackStart(),
     viteReact(),
   ],

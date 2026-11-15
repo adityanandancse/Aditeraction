@@ -28,3 +28,9 @@ Updated whenever a task adds or resolves something only AB can do. Check off ite
 ## After indexing
 - [ ] Run aeo-audit
 - [ ] Optional: enable Cloudflare Turnstile if form spam appears
+
+## Blog
+- [ ] Write the first post: add content/blog/<url-slug>.md (copy content/blog/example-post.md, remove the draft line). Until one post is published the Blog link stays hidden and /blog is noindex
+- [ ] Deploy after each new post (bun run deploy): posts are compiled at build time, so nothing goes live until a deploy
+- [ ] Turn on deploy on push: Cloudflare dashboard → Workers & Pages → aditeraction → Settings → Builds → connect the GitHub repo (branch main, build command `bun run build`, deploy command `npx wrangler deploy`). After that a push to main publishes; no manual `bun run deploy`
+- [ ] Optional: a 1200x630 social card per post (frontmatter image). Without one, posts share /og/blog.png

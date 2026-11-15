@@ -1,13 +1,15 @@
-import { visibleNav, type AppPath } from "~/lib/site";
+import type { AppPath } from "~/lib/site";
+import { visibleNav } from "~/lib/nav";
 import { Eyebrow } from "../ui/Eyebrow";
 import { BracketLink } from "../ui/BracketLink";
 
-// Ways back from a 404. Work drops out (via visibleNav) until a case study is
-// published.
+// Ways back from a 404. Work and Blog drop out (via visibleNav) until each has
+// something published.
 const links = visibleNav<{ label: string; to: AppPath }>([
   { label: "Home", to: "/" },
   { label: "Services", to: "/services" },
   { label: "Work", to: "/work" },
+  { label: "Blog", to: "/blog" },
   { label: "Contact", to: "/contact" },
 ]);
 

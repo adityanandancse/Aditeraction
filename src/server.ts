@@ -2,10 +2,12 @@
 // convention and aliases it behind "@tanstack/react-start/server-entry" (the
 // `main` in wrangler.jsonc), so no config change is needed.
 //
-// Adds two things around the stock handler:
+// Adds three things around the stock handler:
 //   1. www → apex: any host starting with "www." gets a 301 to the same
 //      path + query on the apex host.
-//   2. Security headers on every response.
+//   2. Legacy URLs from the old Hostinger site (.html/.htm/.php, /home) get a
+//      301 to the matching current route.
+//   3. Security headers on every response.
 //
 // NO Content-Security-Policy for now, on purpose: the site ships inline styles
 // (the production stylesheet is inlined in <head>), inline scripts (the JS-class
@@ -17,6 +19,53 @@ import {
   defaultStreamHandler,
   createServerEntry,
 } from "@tanstack/react-start/server";
+
+// Old Hostinger site URLs → current routes (keys lowercase). Add new entries
+// here as Search Console reports 404s for legacy URLs.
+export const LEGACY_REDIRECTS: Record<string, string> = {
+  "/index.html": "/",
+  "/index.htm": "/",
+  "/index.php": "/",
+  "/home": "/",
+  "/home.html": "/",
+  "/privacy-policy.html": "/privacy",
+  "/privacy.html": "/privacy",
+  "/privacy-policy.php": "/privacy",
+  "/about.html": "/about",
+  "/about-us.html": "/about",
+  "/contact.html": "/contact",
+  "/contact-us.html": "/contact",
+  "/services.html": "/services",
+  "/service.html": "/services",
+  "/portfolio.html": "/",
+  "/work.html": "/",
+  "/projects.html": "/",
+};
+
+const LEGACY_EXTENSION = /\.(html?|php)$/;
+const LEGACY_KEYWORDS: Array<[string, string]> = [
+  ["privacy", "/privacy"],
+  ["about", "/about"],
+  ["contact", "/contact"],
+  ["service", "/services"],
+];
+
+// Returns the current route for a legacy URL, or null if the path isn't one.
+function legacyRedirectTarget(method: string, pathname: string): string | null {
+  if (method !== "GET" && method !== "HEAD") return null;
+  const path = pathname.toLowerCase();
+  if (path.startsWith("/assets/") || path.startsWith("/og/")) return null;
+  if (path !== "/home" && !LEGACY_EXTENSION.test(path)) return null;
+
+  const mapped = Object.hasOwn(LEGACY_REDIRECTS, path) ? LEGACY_REDIRECTS[path] : undefined;
+  if (mapped !== undefined) return mapped;
+
+  const filename = path.slice(path.lastIndexOf("/") + 1).replace(LEGACY_EXTENSION, "");
+  for (const [keyword, target] of LEGACY_KEYWORDS) {
+    if (filename.includes(keyword)) return target;
+  }
+  return "/";
+}
 
 const startFetch = createStartHandler(defaultStreamHandler);
 
@@ -58,6 +107,14 @@ export default createServerEntry({
       url.host = host.slice(4); // keeps any port; path + query stay as-is
       return withSecurityHeaders(
         new Response(null, { status: 301, headers: { Location: url.toString() } }),
+      );
+    }
+
+    const legacyTarget = legacyRedirectTarget(request.method, url.pathname);
+    if (legacyTarget !== null) {
+      // Absolute apex URL (www is already handled above); query string dropped.
+      return withSecurityHeaders(
+        new Response(null, { status: 301, headers: { Location: url.origin + legacyTarget } }),
       );
     }
 

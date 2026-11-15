@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { site, visibleNav } from "~/lib/site";
+import { site } from "~/lib/site";
+import { visibleNav } from "~/lib/nav";
 import { LogoHorizontal } from "./Logo";
 import { ButtonLink } from "../ui/Button";
 
-// Top-level links beside the Services dropdown (Work hidden until published).
+// Top-level links beside the Services dropdown (Work and Blog hidden until they have content).
 const navItems = visibleNav(site.nav).filter((n) => n.to !== "/services");
 
 const navLink =

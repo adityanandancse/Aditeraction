@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { site, visibleNav } from "~/lib/site";
+import { site } from "~/lib/site";
+import { visibleNav } from "~/lib/nav";
 import { Reveal } from "~/components/motion/Reveal";
 import { LogoHorizontal } from "./Logo";
 

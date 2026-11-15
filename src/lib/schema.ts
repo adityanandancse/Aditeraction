@@ -256,6 +256,67 @@ export function caseStudyGraph(cs: CaseStudy): Node[] {
   ];
 }
 
+// Blog (posts come from src/lib/blog.ts; passed in so this file stays free of
+// import.meta.glob and bun scripts can still import it).
+interface BlogPostInput {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  updated?: string;
+  tags: readonly string[];
+  image?: string;
+}
+
+export function blogHubGraph(posts: readonly BlogPostInput[]): Node[] {
+  const u = pageUrl("/blog");
+  const nodes: Node[] = [
+    webPageNode(u, "CollectionPage", { name: "Blog" }),
+    breadcrumbNode(u, [{ name: "Home", url: pageUrl("/") }, { name: "Blog" }]),
+  ];
+  if (posts.length > 0) {
+    nodes.push({
+      "@type": "ItemList",
+      "@id": `${u}#postlist`,
+      itemListElement: posts.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: p.title,
+        url: pageUrl(`/blog/${p.slug}`),
+      })),
+    });
+  }
+  return nodes;
+}
+
+export function blogPostGraph(post: BlogPostInput): Node[] {
+  const u = pageUrl(`/blog/${post.slug}`);
+  const image = post.image ?? "/og/blog.png";
+  return [
+    webPageNode(u, "WebPage", { name: post.title }),
+    breadcrumbNode(u, [
+      { name: "Home", url: pageUrl("/") },
+      { name: "Blog", url: pageUrl("/blog") },
+      { name: post.title },
+    ]),
+    {
+      "@type": "BlogPosting",
+      "@id": `${u}#article`,
+      headline: post.title,
+      description: post.description,
+      datePublished: post.date,
+      dateModified: post.updated ?? post.date,
+      author: { "@id": FOUNDER_ID },
+      publisher: orgRef(),
+      mainEntityOfPage: { "@id": `${u}#webpage` },
+      image: /^https?:\/\//.test(image) ? image : `${site.url}${image}`,
+      keywords: post.tags.length > 0 ? post.tags.join(", ") : undefined,
+      inLanguage: "en",
+      url: u,
+    },
+  ];
+}
+
 export function aboutGraph(): Node[] {
   const u = pageUrl("/about");
   return [

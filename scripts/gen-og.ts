@@ -24,7 +24,7 @@
 // in JetBrains Mono (Graphite, uppercase, wide tracking). No gradients/shadows/
 // photos. "Idea to launched." and "Brand, site, app. One roof." never share an image.
 //
-// Output: public/og/{home,services,about,contact,work,service-<slug>}.png
+// Output: public/og/{home,services,about,contact,work,blog,service-<slug>}.png
 import { Resvg } from "@resvg/resvg-js";
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -185,6 +185,12 @@ const pages: OgPage[] = [
     headline: "Work",
     subtitle: industriesLine,
     label: "WORK",
+  },
+  {
+    file: "blog",
+    headline: "Blog",
+    subtitle: "Notes on building brands, websites and apps.",
+    label: "BLOG",
   },
 ];
 
