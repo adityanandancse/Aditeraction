@@ -3,6 +3,8 @@ import { fullGraph, jsonLd } from "./schema";
 
 export interface SeoInput {
   title: string;
+  /** Use `title` exactly as given, with no " — Aditeraction" suffix (blog posts). */
+  bareTitle?: boolean;
   description: string;
   /** Path with a leading slash. No trailing slash except the root "/". */
   path: string;
@@ -42,10 +44,11 @@ function absolute(pathOrUrl: string): string {
  * Builds head() meta + links for a route. Every route must use this so no page
  * ships without a canonical. Title pattern (02-seo-plan.md): inner pages read
  * "{primary} — Aditeraction"; anything already carrying the brand name is left
- * as-is (e.g. the Home title).
+ * as-is (e.g. the Home title). Blog posts pass `bareTitle`: their titles are
+ * written to length, and the suffix pushed them past what search results show.
  */
-export function seo({ title, description, path, image, imageAlt, noindex, article, graph }: SeoInput): HeadOutput {
-  const fullTitle = title.includes(site.name) ? title : `${title} — ${site.name}`;
+export function seo({ title, bareTitle, description, path, image, imageAlt, noindex, article, graph }: SeoInput): HeadOutput {
+  const fullTitle = bareTitle || title.includes(site.name) ? title : `${title} — ${site.name}`;
   // Canonical: site.url + path, no trailing slash except "/".
   const canonical = site.url + path;
   const ogImage = absolute(image ?? DEFAULT_OG_IMAGE);

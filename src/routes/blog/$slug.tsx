@@ -21,6 +21,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const { post } = loaderData;
     const base = seo({
       title: post.title,
+      bareTitle: true,
       description: post.description,
       path: `/blog/${post.slug}`,
       image: post.image ?? "/og/blog.png",
